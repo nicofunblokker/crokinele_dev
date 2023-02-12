@@ -1,0 +1,74 @@
+input[type="text"], input[type="number"] {
+  background-color: #F5DEB3;
+  border: 1px solid #8B5E3C;
+  padding: 10px;
+  margin: 10px;
+}
+
+select {
+  background-color: #F5DEB3;
+  border: 1px solid #8B5E3C;
+  padding: 10px;
+  margin: 10px;
+}
+
+button {
+  background-color: #8B5E3C;
+  color: white;
+  border: 1px solid white;
+  border-radius: 100%;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 10px;
+}
+
+header {
+  background-color: #8B5E3C;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+table {
+  background-color: #F4A460;
+  border-collapse: collapse;
+  width: 60%;
+  margin: 20px auto;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+th, td {
+  border: 1px solid #8B5E3C;
+  padding: 10px;
+}
+
+th {
+  background-color: #F5DEB3;
+}
+
+
+.players-table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.player-row {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin: 10px 0;
+}
+
+
+
+body {
+  background-image: url('./crokinole.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+ }
