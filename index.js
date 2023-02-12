@@ -104,14 +104,13 @@ var deleteRoundButton = document.getElementById("delete-round-button");
     let lastRow = rows[rows.length - 1];
     let lastRowValue = lastRow.cells[0].innerHTML;
 
-    for (let i = rows.length - 2; i > 0; i--) {
+    for (let i = rows.length-1; i > 0; i--) {
       let row = rows[i];
       if (row.cells[0].innerHTML === lastRowValue) {
         table.deleteRow(i);
       }
     }
 
-    table.deleteRow(rows.length - 1);
     if(round > 1) {
       round--;
     }
