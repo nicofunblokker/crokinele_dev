@@ -52,6 +52,12 @@ function calculateResults() {
   var results = document.getElementById("results");
   var scores = [];
   var playerInputs = document.querySelectorAll(".player-input");
+  for (var i = 0; i < playerInputs.length; i += 2) {
+  var playerNames = ["red", "blue", "white", "black"];
+  if (playerInputs[i].value === "") {
+      playerInputs[i].value = playerNames[i/2 % playerNames.length];
+    }
+  }
   for (var i = 1; i < playerInputs.length; i += 2) {
     scores.push(playerInputs[i].value);
   }
