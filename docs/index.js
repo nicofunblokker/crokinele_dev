@@ -59,8 +59,14 @@ function calculateResults() {
     }
   }
   for (var i = 1; i < playerInputs.length; i += 2) {
-    scores.push(playerInputs[i].value);
+    if (!isNaN(playerInputs[i].value) && playerInputs[i].value % 5 === 0) {
+      scores.push(playerInputs[i].value);
+    } else {
+      alert("Score has to be a numeric value and divisible by 5. Please enter a valid score.");
+      return;
+    }
   }
+  
   var maxScore = Math.max(...scores);
   for (var i = 0; i < playerInputs.length; i += 2) {
     var row = results.insertRow();
