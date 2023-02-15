@@ -110,24 +110,31 @@ newRoundButton.addEventListener("click", function () {
 
 var deleteRoundButton = document.getElementById("delete-round-button");
 
-  function deleteRound() {
-    let table = document.getElementById("results");
-    let rows = table.rows;
-    let lastRow = rows[rows.length - 1];
-    let lastRowValue = lastRow.cells[0].innerHTML;
+function deleteRound() {
+  let table = document.getElementById("results");
+  let rows = table.rows;
+  let lastRow = rows[rows.length - 1];
+  let lastRowValue = lastRow.cells[0].innerHTML;
+  let previousRowValue = "";
 
-    for (let i = rows.length-1; i > 0; i--) {
-      let row = rows[i];
-      if (row.cells[0].innerHTML === lastRowValue) {
-        table.deleteRow(i);
-      }
+  for (let i = rows.length-1; i > 0; i--) {
+    let row = rows[i];
+    if (row.cells[0].innerHTML === lastRowValue) {
+      previousRowValue = rows[i - 1].cells[0].innerHTML;
+      table.deleteRow(i);
     }
-
-    if(round > 1) {
-      round--;
-    }
-    localStorage.setItem("round", round);
   }
+
+  let newRoundValue = parseInt(previousRowValue);
+  if (!isNaN(newRoundValue)) {
+    round = newRoundValue;
+  } else if (round > 1) {
+    round--;
+  }
+
+  localStorage.setItem("round", round);
+}
+
 
 
 deleteRoundButton.addEventListener("click", function () {
