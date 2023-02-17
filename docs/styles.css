@@ -13,22 +13,41 @@ select {
 }
 
 button {
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  display: inline-block;
+  margin: 0.5rem;
+  vertical-align: middle;
   background-color: #8B5E3C;
   color: white;
   border: 1px solid white;
-  border-radius: 100%;
-  width: 100px;
-  height: 100px;
   cursor: pointer;
   font-size: 16px;
   margin: 10px;
-  text-align: center; 
-  display: flex;  /*these last four are newly added */
+  text-align: center;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
+/* On desktop, make the buttons circular */
+@media only screen and (min-width: 768px) {
+  button {
+    border-radius: 100%;
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* On mobile, make the buttons square */
+@media only screen and (max-width: 767px) {
+  button {
+    border-radius: 0;
+    width: 120px;
+    height: 50px;
+  }
+}
 
 #reset-button {
 background-color: #720505;
