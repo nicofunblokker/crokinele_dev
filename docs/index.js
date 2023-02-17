@@ -53,19 +53,23 @@ function calculateResults() {
   var scores = [];
   var playerInputs = document.querySelectorAll(".player-input");
   for (var i = 0; i < playerInputs.length; i += 2) {
-  var playerNames = ["red", "blue", "white", "black"];
-  if (playerInputs[i].value === "") {
+    var playerNames = ["red", "blue", "white", "black"];
+    if (playerInputs[i].value === "") {
       playerInputs[i].value = playerNames[i/2 % playerNames.length];
     }
   }
   for (var i = 1; i < playerInputs.length; i += 2) {
-    if (!isNaN(playerInputs[i].value) && playerInputs[i].value % 5 === 0) {
+    if (playerInputs[i].value === "") {
+      alert("Score cannot be empty. Please enter a valid score.");
+      return;
+    } else if (!isNaN(playerInputs[i].value) && playerInputs[i].value % 5 === 0) {
       scores.push(playerInputs[i].value);
     } else {
       alert("Score has to be a numeric value and divisible by 5. Please enter a valid score.");
       return;
     }
   }
+
   
   var maxScore = Math.max(...scores);
   for (var i = 0; i < playerInputs.length; i += 2) {
@@ -100,9 +104,13 @@ function startNewRound() {
     players[i + 1].value = "";
   }
   var results = document.getElementById("results");
-  results.innerHTML = localStorage.getItem("results");
+  var savedResults = localStorage.getItem("results");
+  if (savedResults) {
+    results.innerHTML = savedResults;
+  }
   round = parseInt(localStorage.getItem("round")) || 0;
 }
+
 
 newRoundButton.addEventListener("click", function () {
   startNewRound();
@@ -178,7 +186,7 @@ function calculateTotal() {
   }
 
   if (maxScoreRow) {
-    maxScoreRow.style.backgroundColor = "red";
+    maxScoreRow.style.backgroundColor = "#ce0a0a";
   }
 }
 

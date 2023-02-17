@@ -22,11 +22,16 @@ button {
   cursor: pointer;
   font-size: 16px;
   margin: 10px;
-  text-align: center;
+  text-align: center; 
+  display: flex;  /*these last four are newly added */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
+
 #reset-button {
-background-color: #ff0000;
+background-color: #720505;
 }
 
 
@@ -39,7 +44,7 @@ header {
 }
 
 table {
-  background-color: #F4A460;
+  background-color: #ece6e0;
   border-collapse: collapse;
   width: 60%;
   margin: 20px auto;

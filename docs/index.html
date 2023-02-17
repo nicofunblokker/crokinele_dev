@@ -1,8 +1,36 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <style>
+      html {
+        font-size: 16px;
+      }
+      .player-input {
+  width: 100%;
+  max-width: 15em; /* maximum width of input box */
+}
+
+@media (max-width: 768px) {
+  .player-input {
+    max-width: 10em; /* reduce maximum width on smaller screens */
+  }
+}
+button {
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  display: inline-block;
+  margin: 0.5rem;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 768px) {
+  button {
+    font-size: 1rem;
+    padding: 6px 12px;
+  }
+}
       table {
         width: 100%;
         border-collapse: collapse;
@@ -14,38 +42,54 @@
       }
       th {
         background-color: #f2f2f2;
+        white-space: normal;
       }
       .winner {
-        background-color: yellow;
+        background-color: rgba(221, 192, 26, 0.856);
+      }
+      #results {
+        max-width: 100%;
+        overflow-x: auto;
+      }
+      #playerInputs {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
       }
     </style>
   </head>
   <body>
     <div id="particles-js"></div>
-    <select id="playerCount">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-    </select>
-    <button id="add-player-button">Add player(s)</button>
-    <br>
-    <button id="calculate-results-button">Add <br> scores</button>
-    <button id="new-round-button">Load cached results</button>
-    <button id="delete-round-button">Delete last round</button>
-    <button id="calculate-total-button">Calculate Total</button>
-    <button id="reset-button">Reset <br> Score</button>
+    <div id="button-container">
+      <select id="playerCount">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+      <button id="add-player-button">Add player(s)</button>
+      <br>
+      <button id="calculate-results-button">Add <br> scores</button>
+      <button id="new-round-button">Load cached results</button>
+      <button id="delete-round-button">Delete last round</button>
+      <button id="calculate-total-button">Calculate Total</button>
+      <button id="reset-button">Reset <br> Score</button>
+    </div>
     <br>
     <div id="playerInputs"></div>
     <br>
     <table id="results">
-      <tr>
-        <th>Round</th>
-        <th>Player</th>
-        <th>Score</th>
-      </tr>
+      <thead>
+        <tr>
+          <th>Round</th>
+          <th>Player</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
     </table>
     <script src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   </body>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 </html>
