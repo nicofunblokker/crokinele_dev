@@ -247,23 +247,38 @@ columns.forEach((column, index) => {
   });
 
   column.addEventListener('touchstart', (event) => {
-    firstClick = column;
-    firstClick.style.backgroundColor = 'yellow';
+    if (!firstClick) {
+      firstClick = column;
+      firstClick.style.backgroundColor = 'yellow';
+    } else {
+      const secondClick = column;
+      const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
+      const secondClickFirstLetter = secondClick.classList[0].charAt(0).toUpperCase();
+      if (firstClick.textContent === '') {
+        firstClick.textContent = secondClickFirstLetter;
+      } else {
+        firstClick.textContent += secondClickFirstLetter;
+      }
+      firstClick.style.backgroundColor = '';
+      firstClick = null;
+      
+      // Update local storage with the new table data
+      const hitsData = [];
+      for (let i = 0; i < columns.length; i++) {
+        const column = columns[i];
+        hitsData.push(column.textContent);
+      }
+      localStorage.setItem('hits', JSON.stringify(hitsData));
+    }
     event.preventDefault(); // prevent the default touch event
   });
 
   column.addEventListener('touchend', (event) => {
-    const secondClick = column;
-    const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
-    const secondClickFirstLetter = secondClick.classList[0].charAt(0).toUpperCase();
-    if (firstClick.textContent === '') {
-      firstClick.textContent = secondClickFirstLetter;
-    } else {
-      firstClick.textContent += secondClickFirstLetter;
-    }
-    firstClick.style.backgroundColor = '';
-    firstClick = null;
     event.preventDefault(); // prevent the default touch event
+  });
+
+  column.addEventListener('touchmove', (event) => {
+    event.preventDefault(); // prevent scrolling while dragging
   });
 
   column.addEventListener('touchcancel', (event) => {
@@ -271,12 +286,7 @@ columns.forEach((column, index) => {
     firstClick = null;
     event.preventDefault(); // prevent the default touch event
   });
-
-  column.addEventListener('touchmove', (event) => {
-    event.preventDefault(); // prevent scrolling while dragging
-  });
 });
-
 
 
 var resetButton = document.getElementById("reset-button");
