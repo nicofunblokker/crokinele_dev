@@ -70,7 +70,7 @@ button {
       <button id="add-player-button">Add player(s)</button>
       <br>
       <button id="calculate-results-button">Add <br> scores</button>
-      <button id="new-round-button">Load cached results</button>
+      <!-- <button id="new-round-button">Load cached results</button> -->
       <button id="delete-round-button">Delete last round</button>
       <button id="calculate-total-button">Calculate Total</button>
       <button id="reset-button">Reset <br> Score</button>
@@ -78,6 +78,48 @@ button {
     <br>
     <div id="playerInputs"></div>
     <br>
+    <table id="hits">
+      <title>Table with Color Columns</title>
+      <style>
+        table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+    
+        th {
+          padding: 8px;
+          text-align: left;
+        }
+    
+        th.blau {
+          background-color: #0077C0;
+          color: white;
+        }
+    
+        th.rot {
+          background-color: #FF0000;
+          color: white;
+        }
+    
+        th.weiss {
+          background-color: #c5c1c1;
+          color: black;
+        }
+    
+        th.schwarz {
+          background-color: #000000;
+          color: white;
+        }
+      </style>
+      <thead>
+        <tr>
+          <th class="blau"></th>
+          <th class="rot"></th>
+          <th class="weiss"></th>
+          <th class="schwarz"></th>
+        </tr>
+      </thead>
+    </table>
     <table id="results">
       <thead>
         <tr>

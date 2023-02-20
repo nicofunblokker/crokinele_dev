@@ -70,6 +70,8 @@ function calculateResults() {
     }
   }
 
+
+
   
   var maxScore = Math.max(...scores);
   for (var i = 0; i < playerInputs.length; i += 2) {
@@ -97,25 +99,19 @@ calculateResultsButton.addEventListener("click", function () {
   calculateResults();
 });
 
-var newRoundButton = document.getElementById("new-round-button");
-
-function startNewRound() {
-  for (var i = 0; i < players.length; i += 2) {
-    players[i + 1].value = "";
-  }
-  var results = document.getElementById("results");
+window.onload = function() {
+  // Restore the saved results from localStorage
   var savedResults = localStorage.getItem("results");
   if (savedResults) {
-    results.innerHTML = savedResults;
+    resultsTable.innerHTML = savedResults;
   }
-  round = parseInt(localStorage.getItem("round")) || 0;
-}
 
-
-newRoundButton.addEventListener("click", function () {
-  startNewRound();
-});
-
+  // Restore the saved round number from localStorage
+  var savedRound = localStorage.getItem("round");
+  if (savedRound) {
+    round = parseInt(savedRound);
+  }
+};
 var deleteRoundButton = document.getElementById("delete-round-button");
 
 function deleteRound() {
@@ -142,7 +138,6 @@ function deleteRound() {
 
   localStorage.setItem("round", round);
 }
-
 
 
 deleteRoundButton.addEventListener("click", function () {
@@ -200,6 +195,89 @@ function reset() {
     location.reload();
     localStorage.setItem("round", 0);
 }
+
+let firstClick = null;
+const columns = document.querySelectorAll('#hits th');
+
+// Check if there is any data in the local storage for "hits" table
+const storedData = localStorage.getItem('hits');
+if (storedData) {
+  // If there is data in the local storage, update the table with it
+  const hitsData = JSON.parse(storedData);
+  for (let i = 0; i < columns.length; i++) {
+    const column = columns[i];
+    if (hitsData[i]) {
+      column.textContent = hitsData[i];
+    }
+  }
+}
+
+columns.forEach((column, index) => {
+  column.addEventListener('click', () => {
+    if (!firstClick) {
+      firstClick = column;
+      firstClick.style.backgroundColor = 'yellow';
+    } else {
+      const secondClick = column;
+      const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
+      const secondClickFirstLetter = secondClick.classList[0].charAt(0).toUpperCase();
+      if (firstClick.textContent === '') {
+        firstClick.textContent = secondClickFirstLetter;
+      } else {
+        firstClick.textContent += secondClickFirstLetter;
+      }
+      firstClick.style.backgroundColor = '';
+      firstClick = null;
+      
+      // Update local storage with the new table data
+      const hitsData = [];
+      for (let i = 0; i < columns.length; i++) {
+        const column = columns[i];
+        hitsData.push(column.textContent);
+      }
+      localStorage.setItem('hits', JSON.stringify(hitsData));
+    }
+  });
+
+  column.addEventListener('contextmenu', (event) => {
+    event.preventDefault(); // prevent the default context menu from showing up
+    if (column.textContent.length > 0) {
+      column.textContent = column.textContent.slice(0, -1); // remove the last character
+    }
+  });
+
+  column.addEventListener('touchstart', (event) => {
+    firstClick = column;
+    firstClick.style.backgroundColor = 'yellow';
+    event.preventDefault(); // prevent the default touch event
+  });
+
+  column.addEventListener('touchend', (event) => {
+    const secondClick = column;
+    const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
+    const secondClickFirstLetter = secondClick.classList[0].charAt(0).toUpperCase();
+    if (firstClick.textContent === '') {
+      firstClick.textContent = secondClickFirstLetter;
+    } else {
+      firstClick.textContent += secondClickFirstLetter;
+    }
+    firstClick.style.backgroundColor = '';
+    firstClick = null;
+    event.preventDefault(); // prevent the default touch event
+  });
+
+  column.addEventListener('touchcancel', (event) => {
+    firstClick.style.backgroundColor = '';
+    firstClick = null;
+    event.preventDefault(); // prevent the default touch event
+  });
+
+  column.addEventListener('touchmove', (event) => {
+    event.preventDefault(); // prevent scrolling while dragging
+  });
+});
+
+
 
 var resetButton = document.getElementById("reset-button");
 
