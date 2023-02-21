@@ -247,36 +247,47 @@ columns.forEach((column, index) => {
   });
 
   column.addEventListener('touchstart', (event) => {
-    if (!firstClick) {
-      firstClick = column;
-      firstClick.style.backgroundColor = 'yellow';
-    } else {
-      const secondClick = column;
-      const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
-      const secondClickFirstLetter = secondClick.classList[0].charAt(0).toUpperCase();
-      if (firstClick.textContent === '') {
-        firstClick.textContent = secondClickFirstLetter;
+    if (event.touches.length === 1) {
+      // Single touch, add a letter
+      if (!firstClick) {
+        firstClick = column;
+        firstClick.style.backgroundColor = 'yellow';
+        clickTimeout = setTimeout(() => {
+          // Long tap, remove last letter
+          if (firstClick.textContent) {
+            firstClick.textContent = firstClick.textContent.slice(0, -1);
+          }
+          firstClick.style.backgroundColor = '';
+          firstClick = null;
+        }, 1000);
       } else {
-        firstClick.textContent += secondClickFirstLetter;
+        const secondClick = column;
+        const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
+        const secondClickFirstLetter = secondClick.classList[0].charAt(0).toUpperCase();
+        if (firstClick.textContent === '') {
+          firstClick.textContent = secondClickFirstLetter;
+        } else {
+          firstClick.textContent += secondClickFirstLetter;
+        }
+        firstClick.style.backgroundColor = '';
+        firstClick = null;
+  
+        // Update local storage with the new table data
+        const hitsData = [];
+        for (let i = 0; i < columns.length; i++) {
+          const column = columns[i];
+          hitsData.push(column.textContent);
+        }
+        localStorage.setItem('hits', JSON.stringify(hitsData));
       }
-      firstClick.style.backgroundColor = '';
-      firstClick = null;
-      
-      // Update local storage with the new table data
-      const hitsData = [];
-      for (let i = 0; i < columns.length; i++) {
-        const column = columns[i];
-        hitsData.push(column.textContent);
-      }
-      localStorage.setItem('hits', JSON.stringify(hitsData));
     }
     event.preventDefault(); // prevent the default touch event
   });
-
-  column.addEventListener('touchend', (event) => {
-    event.preventDefault(); // prevent the default touch event
+  
+  column.addEventListener('touchend', () => {
+    clearTimeout(clickTimeout);
   });
-
+  
   column.addEventListener('touchmove', (event) => {
     event.preventDefault(); // prevent scrolling while dragging
   });
