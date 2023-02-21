@@ -22,7 +22,7 @@ function addPlayer() {
     playerRow.style.marginBottom = "10px";
 
     var playerLabel = document.createElement("label");
-    playerLabel.innerHTML = "Player " + (i + 1) + " Name:";
+    playerLabel.innerHTML = "Player " + (i + 1);
     playerLabel.style.marginRight = "10px";
     playerRow.appendChild(playerLabel);
 
@@ -33,7 +33,7 @@ function addPlayer() {
     playerRow.appendChild(playerInput);
 
     var scoreLabel = document.createElement("label");
-    scoreLabel.innerHTML = "Score:";
+    scoreLabel.innerHTML = "Score";
     scoreLabel.style.marginRight = "10px";
     playerRow.appendChild(scoreLabel);
 
@@ -53,7 +53,7 @@ function calculateResults() {
   var scores = [];
   var playerInputs = document.querySelectorAll(".player-input");
   for (var i = 0; i < playerInputs.length; i += 2) {
-    var playerNames = ["red", "blue", "white", "black"];
+    var playerNames = ["blue", "red", "white", "black"];
     if (playerInputs[i].value === "") {
       playerInputs[i].value = playerNames[i/2 % playerNames.length];
     }
