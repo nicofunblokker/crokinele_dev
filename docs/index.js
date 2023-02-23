@@ -15,6 +15,7 @@ function addPlayer() {
     playerInputsDiv.removeChild(playerInputsDiv.childNodes[0]);
   }
 
+  var playerNames = ["blue", "red", "white", "black"];
   for (var i = 0; i < playerCount; i++) {
     var playerRow = document.createElement("div");
     playerRow.style.display = "flex";
@@ -22,7 +23,7 @@ function addPlayer() {
     playerRow.style.marginBottom = "10px";
 
     var playerLabel = document.createElement("label");
-    playerLabel.innerHTML = "Player " + (i + 1);
+    playerLabel.innerHTML = "P" + (i + 1);
     playerLabel.style.marginRight = "10px";
     playerRow.appendChild(playerLabel);
 
@@ -30,6 +31,14 @@ function addPlayer() {
     playerInput.type = "text";
     playerInput.classList.add("player-input");
     playerInput.style.marginRight = "10px";
+    playerInput.value = playerNames[i] || "";
+    playerInput.addEventListener("focus", (function(index) {
+      return function() {
+        if (this.value === playerNames[index]) {
+          this.value = "";
+        }
+      };
+    })(i));
     playerRow.appendChild(playerInput);
 
     var scoreLabel = document.createElement("label");
@@ -259,7 +268,7 @@ columns.forEach((column, index) => {
           }
           firstClick.style.backgroundColor = '';
           firstClick = null;
-        }, 1000);
+        }, 600);
       } else {
         const secondClick = column;
         const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
