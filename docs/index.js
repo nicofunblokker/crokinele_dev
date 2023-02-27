@@ -315,12 +315,48 @@ columns.forEach((column, index) => {
   });
 });
 
-
 var resetButton = document.getElementById("reset-button");
 
 resetButton.addEventListener("click", function () {
   reset();
 });
+
+
+
+// Get a reference to the button element
+const downloadJsonButton = document.getElementById('download-json-button');
+
+// Attach a click event listener to the button
+downloadJsonButton.addEventListener('click', function() {
+  // Retrieve data from localStorage
+  const hitsData = JSON.parse(localStorage.getItem('hits'));
+  const resultsHtml = localStorage.getItem('results');
+
+  // Create an object that contains both the results HTML and the hits data
+  const data = {
+    results: resultsHtml,
+    hits: hitsData
+  };
+
+  // Convert the object to a JSON string
+  const jsonData = JSON.stringify(data);
+
+  // Create a link element
+  const link = document.createElement('a');
+  link.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(jsonData));
+  link.setAttribute('download', 'crokinele_results.json');
+  link.style.display = 'none';
+
+  // Add the link to the DOM
+  document.body.appendChild(link);
+
+  // Simulate a click on the link to download the file
+  link.click();
+
+  // Remove the link from the DOM
+  document.body.removeChild(link);
+});
+
 // particlesJS("particles-js", {
 //     particles: {
 //       number: {
