@@ -52,6 +52,7 @@ function addPlayer() {
 
     playerInputsDiv.appendChild(playerRow);
   }
+  localStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
 }
 
 function calculateResults() {
@@ -120,6 +121,11 @@ window.onload = function() {
   var savedRound = localStorage.getItem("round");
   if (savedRound) {
     round = parseInt(savedRound);
+  }
+  var storedPlayerInputsDiv = localStorage.getItem("playerInputsDiv");
+  
+  if (storedPlayerInputsDiv) {
+    playerInputsDiv.innerHTML = storedPlayerInputsDiv;
   }
 };
 var deleteRoundButton = document.getElementById("delete-round-button");
