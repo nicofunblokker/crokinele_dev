@@ -1,4 +1,4 @@
-var playerInputsDiv = document.getElementById("player-inputs");
+var playerInputsDiv = document.getElementById("playerInputs");
 var addPlayerButton = document.getElementById("add-player-button");
 var calculateResultsButton = document.getElementById("calculate-results-button");
 var calculateTotalButton = document.getElementById("calculate-total-button");
@@ -9,7 +9,6 @@ var round = 0;
 
 function addPlayer() {
   var playerCount = document.getElementById("playerCount").value;
-  var playerInputsDiv = document.getElementById("playerInputs");
 
   while (playerInputsDiv.childNodes.length > 0) {
     playerInputsDiv.removeChild(playerInputsDiv.childNodes[0]);
@@ -56,11 +55,11 @@ function addPlayer() {
 }
 
 function calculateResults() {
-  var round = localStorage.getItem("round") || 1;
-  round++;
+
   var results = document.getElementById("results");
   var scores = [];
   var playerInputs = document.querySelectorAll(".player-input");
+
   for (var i = 0; i < playerInputs.length; i += 2) {
     var playerNames = ["blue", "red", "white", "black"];
     if (playerInputs[i].value === "") {
@@ -72,6 +71,8 @@ function calculateResults() {
       alert("Score cannot be empty. Please enter a valid score.");
       return;
     } else if (!isNaN(playerInputs[i].value) && playerInputs[i].value % 5 === 0) {
+      round = localStorage.getItem("round") || 1;
+      round++;
       scores.push(playerInputs[i].value);
     } else {
       alert("Score has to be a numeric value and divisible by 5. Please enter a valid score.");
@@ -141,7 +142,7 @@ function deleteRound() {
   let newRoundValue = parseInt(previousRowValue);
   if (!isNaN(newRoundValue)) {
     round = newRoundValue;
-  } else if (round > 1) {
+  } else if (round > 0) {
     round--;
   }
 
@@ -314,112 +315,112 @@ var resetButton = document.getElementById("reset-button");
 resetButton.addEventListener("click", function () {
   reset();
 });
-particlesJS("particles-js", {
-    particles: {
-      number: {
-        value: 100,
-        density: {
-          enable: true,
-          value_area: 800
-        }
-      },
-      color: {
-        value: "#ffffff"
-      },
-      shape: {
-        type: "circle",
-        stroke: {
-          width: 0,
-          color: "#000000"
-        },
-        polygon: {
-          nb_sides: 5
-        },
-        image: {
-          src: "img/github.svg",
-          width: 100,
-          height: 100
-        }
-      },
-      opacity: {
-        value: 0.5,
-        random: false,
-        anim: {
-          enable: false,
-          speed: 1,
-          opacity_min: 0.1,
-          sync: false
-        }
-      },
-      size: {
-        value: 3,
-        random: true,
-        anim: {
-          enable: false,
-          speed: 40,
-          size_min: 0.1,
-          sync: false
-        }
-      },
-      line_linked: {
-        enable: true,
-        distance: 150,
-        color: "#ffffff",
-        opacity: 0.4,
-        width: 1
-      },
-      move: {
-        enable: true,
-        speed: 6,
-        direction: "none",
-        random: false,
-        straight: false,
-        out_mode: "out",
-        bounce: false,
-        attract: {
-          enable: false,
-          rotateX: 600,
-          rotateY: 1200
-        }
-      }
-    },
-    interactivity: {
-      detect_on: "canvas",
-      events: {
-        onhover: {
-          enable: true,
-          mode: "repulse"
-        },
-        onclick: {
-          enable: true,
-          mode: "push"
-        },
-        resize: true
-      },
-      modes: {
-        grab: {
-          distance: 400,
-          line_linked: {
-            opacity: 1
-          }
-        },
-        bubble: {
-          distance: 400,
-          size: 40,
-          duration: 2,
-          opacity: 8,
-          speed: 3
-        },
-        repulse: {
-          distance: 200,
-          duration: 0.4
-        },
-        push: {
-          particles_nb: 4
-        },
-        remove: {
-          particles_nb: 2
-        }
-      }
-    },
-});
+// particlesJS("particles-js", {
+//     particles: {
+//       number: {
+//         value: 100,
+//         density: {
+//           enable: true,
+//           value_area: 800
+//         }
+//       },
+//       color: {
+//         value: "#ffffff"
+//       },
+//       shape: {
+//         type: "circle",
+//         stroke: {
+//           width: 0,
+//           color: "#000000"
+//         },
+//         polygon: {
+//           nb_sides: 5
+//         },
+//         image: {
+//           src: "img/github.svg",
+//           width: 100,
+//           height: 100
+//         }
+//       },
+//       opacity: {
+//         value: 0.5,
+//         random: false,
+//         anim: {
+//           enable: false,
+//           speed: 1,
+//           opacity_min: 0.1,
+//           sync: false
+//         }
+//       },
+//       size: {
+//         value: 3,
+//         random: true,
+//         anim: {
+//           enable: false,
+//           speed: 40,
+//           size_min: 0.1,
+//           sync: false
+//         }
+//       },
+//       line_linked: {
+//         enable: true,
+//         distance: 150,
+//         color: "#ffffff",
+//         opacity: 0.4,
+//         width: 1
+//       },
+//       move: {
+//         enable: true,
+//         speed: 6,
+//         direction: "none",
+//         random: false,
+//         straight: false,
+//         out_mode: "out",
+//         bounce: false,
+//         attract: {
+//           enable: false,
+//           rotateX: 600,
+//           rotateY: 1200
+//         }
+//       }
+//     },
+//     interactivity: {
+//       detect_on: "canvas",
+//       events: {
+//         onhover: {
+//           enable: true,
+//           mode: "repulse"
+//         },
+//         onclick: {
+//           enable: true,
+//           mode: "push"
+//         },
+//         resize: true
+//       },
+//       modes: {
+//         grab: {
+//           distance: 400,
+//           line_linked: {
+//             opacity: 1
+//           }
+//         },
+//         bubble: {
+//           distance: 400,
+//           size: 40,
+//           duration: 2,
+//           opacity: 8,
+//           speed: 3
+//         },
+//         repulse: {
+//           distance: 200,
+//           duration: 0.4
+//         },
+//         push: {
+//           particles_nb: 4
+//         },
+//         remove: {
+//           particles_nb: 2
+//         }
+//       }
+//     },
+// });
