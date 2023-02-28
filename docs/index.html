@@ -3,60 +3,6 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <style>
-      html {
-        font-size: 16px;
-      }
-      .player-input {
-  width: 100%;
-  max-width: 15em; /* maximum width of input box */
-}
-
-@media (max-width: 768px) {
-  .player-input {
-    max-width: 10em; /* reduce maximum width on smaller screens */
-  }
-}
-button {
-  font-size: 1.2rem;
-  padding: 10px 20px;
-  display: inline-block;
-  margin: 0.5rem;
-  vertical-align: middle;
-}
-
-@media screen and (max-width: 768px) {
-  button {
-    font-size: 1rem;
-    padding: 6px 12px;
-  }
-}
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      td, th {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: center;
-      }
-      th {
-        background-color: #f2f2f2;
-        white-space: normal;
-      }
-      .winner {
-        background-color: rgba(221, 192, 26, 0.856);
-      }
-      #results {
-        max-width: 100%;
-        overflow-x: auto;
-      }
-      #playerInputs {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: column;
-      }
-    </style>
   </head>
   <body>
     <div id="particles-js"></div>
@@ -79,37 +25,6 @@ button {
     <div id="playerInputs"></div>
     <table id="hits">
       <title>Crokinele</title>
-      <style>
-        table {
-          border-collapse: collapse;
-          width: 100%;
-        }
-    
-        th {
-          padding: 8px;
-          text-align: left;
-        }
-    
-        th.blau {
-          background-color: #0077C0;
-          color: white;
-        }
-    
-        th.rot {
-          background-color: #FF0000;
-          color: white;
-        }
-    
-        th.weiss {
-          background-color: #c5c1c1;
-          color: black;
-        }
-    
-        th.schwarz {
-          background-color: #000000;
-          color: white;
-        }
-      </style>
       <thead>
         <tr>
           <th class="blau"></th>
@@ -130,6 +45,8 @@ button {
       <tbody>
       </tbody>
     </table>
+    <br>
+    <br>
     <button id="download-json-button">Export<br>JSON</button>
     <script src="index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
