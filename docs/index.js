@@ -166,7 +166,8 @@ function calculateTotal() {
   let rows = table.rows;
   let sums = {};
   let maxScore = 0;
-  let maxScoreRow;
+  let maxScoreRows = [];
+  let zeroScoreRows = [];
 
   for (let i = 1; i < rows.length; i++) {
     let row = rows[i];
@@ -192,13 +193,23 @@ function calculateTotal() {
 
     if (sum > maxScore) {
       maxScore = sum;
-      maxScoreRow = newRow;
+      maxScoreRows = [newRow];
+    } else if (sum === maxScore) {
+      maxScoreRows.push(newRow);
+    }
+
+    if (sum === 0) {
+      zeroScoreRows.push(newRow);
     }
   }
 
-  if (maxScoreRow) {
-    maxScoreRow.style.backgroundColor = "#ce0a0a";
-  }
+  maxScoreRows.forEach(row => {
+    row.classList.add("max-score");
+  });
+
+  zeroScoreRows.forEach(row => {
+    row.classList.add("zero-score");
+  });
 }
 
 calculateTotalButton.addEventListener("click", function () {

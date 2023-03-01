@@ -198,3 +198,10 @@ th.schwarz {
   color: white;
 }
 
+.max-score {
+  background-color: #4CAF50;
+}
+
+.zero-score {
+  background-color: #ce0a0a;
+}
