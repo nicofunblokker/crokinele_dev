@@ -78,3 +78,7 @@ th {
     font-weight: bold;
     text-align: center;
 }
+
+#numRounds, #numPlayers {
+    border: 1px solid white;
+}

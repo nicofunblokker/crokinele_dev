@@ -61,3 +61,41 @@ function calculateFraction() {
     accuracyCell.innerHTML = `${(fraction * 100).toFixed(2)}%`;
   }
 }
+
+function downloadTable() {
+  const table = document.getElementById("scoreTable");
+  const data = [];
+  const headers = [];
+  for (let i = 0; i < table.rows[0].cells.length; i++) {
+    headers[i] = table.rows[0].cells[i].innerText.toLowerCase();
+  }
+  for (let i = 1; i < table.rows.length; i++) {
+    const rowData = {};
+    for (let j = 0; j < table.rows[i].cells.length; j++) {
+      const cell = table.rows[i].cells[j];
+      const checkbox = cell.querySelector('input[type="checkbox"]');
+      if (checkbox && checkbox.checked) {
+        rowData[headers[j]] = 1;
+      } else {
+        rowData[headers[j]] = cell.innerText || 0;
+      }
+    }
+    data.push(rowData);
+  }
+  const jsonData = JSON.stringify(data);
+  const a = document.createElement("a");
+  const file = new Blob([jsonData], { type: "application/json" });
+  a.href = URL.createObjectURL(file);
+  a.download = "scoreTable.json";
+  a.click();
+}
+
+var numRoundsInput = document.getElementById("numRounds");
+
+numRoundsInput.addEventListener("blur", function() {
+    if (numRoundsInput.value > numRoundsInput.max) {
+        numRoundsInput.value = numRoundsInput.max;
+    } else if (numRoundsInput.value < numRoundsInput.min) {
+        numRoundsInput.value = numRoundsInput.min;
+    }
+});

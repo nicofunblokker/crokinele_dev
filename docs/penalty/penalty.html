@@ -10,14 +10,15 @@
      <label for="numPlayers">Number of players:</label>
      <select id="numPlayers">
        <option value="1">1</option>
-       <option value="2">2</option>
+       <option value="2" selected>2</option>
        <option value="3">3</option>
        <option value="4">4</option>
      </select>
      <label for="numRounds">Number of rounds:</label>
-     <input type="number" id="numRounds" name="numRounds" min="1" max="10" value="5">
+     <input type="number" id="numRounds" name="numRounds" min="1" max="100" value="5" step="1">
      <button type="button" onclick="generateTable()">Generate Table</button>
-
+     
+     
      <table id="scoreTable">
        <thead>
 
@@ -25,8 +26,8 @@
        <tbody>
        </tbody>
      </table>
-      
-     <div id="fraction"></div>
+     <button type="button" onclick="downloadTable()">Download Table</button>
+     
 
     </body>
     <script src="index_penalty.js"></script>
