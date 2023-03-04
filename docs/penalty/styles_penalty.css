@@ -11,7 +11,7 @@ table {
 }
 
 th, td {
-    padding: 0.7em;
+    padding: 0.25em;
     text-align: left;
     vertical-align: middle;
     border: 2px solid #ebe2db;
@@ -21,14 +21,15 @@ th, td {
 
 th {
     background-color: #8B5E3C;
-    color: black;
+    color: white;
 }
 
 input[type="number"], button {
     font-size: 1em;
+    font-weight: bold;
     padding: 0.5em;
     background-color: #8B5E3C;
-    color: black;
+    color: white;
     border: none;
 }
 
@@ -54,7 +55,7 @@ label {
 }
 
 body {
-    background-image: url('./crokinole.jpg');
+    background-image: url('../crokinole.jpg');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -64,7 +65,14 @@ body {
     margin-top: 1em;
     font-size: 1.5em;
     font-weight: bold;
-    color: black;
+    color: white;
     background-color: #8B5E3C;
 }
+
+
+input[type="checkbox"] {
+    width: 25px;
+    height: 25px;
+    background-color: #8B5E3C;
+    }
 
