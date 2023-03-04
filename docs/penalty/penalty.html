@@ -7,16 +7,20 @@
   </head>
   <body>
      <title>Crokinele shoot-out</title>
-     <label for="numRounds">Number of rounds played:</label>
+     <label for="numPlayers">Number of players:</label>
+     <select id="numPlayers">
+       <option value="1">1</option>
+       <option value="2">2</option>
+       <option value="3">3</option>
+       <option value="4">4</option>
+     </select>
+     <label for="numRounds">Number of rounds:</label>
      <input type="number" id="numRounds" name="numRounds" min="1" max="10" value="5">
      <button type="button" onclick="generateTable()">Generate Table</button>
 
      <table id="scoreTable">
        <thead>
-         <tr>
-           <th>Round</th>
-           <th>Score</th>
-         </tr>
+
        </thead>
        <tbody>
        </tbody>
@@ -27,5 +31,3 @@
     </body>
     <script src="index_penalty.js"></script>
 </html>
-
-<!-- initial table & styling created using: https://www.tablesgenerator.com/html -->

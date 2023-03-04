@@ -19,18 +19,15 @@ th, td {
     color: black;
 }
 
-th {
-    background-color: #8B5E3C;
-    color: white;
-}
-
-input[type="number"], button {
+input[type="number"], select, button {
     font-size: 1em;
     font-weight: bold;
     padding: 0.5em;
     background-color: #8B5E3C;
     color: white;
     border: none;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -69,10 +66,15 @@ body {
     background-color: #8B5E3C;
 }
 
-
 input[type="checkbox"] {
     width: 25px;
     height: 25px;
     background-color: #8B5E3C;
-    }
+}
 
+th {
+    background-color: #8B5E3C;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
