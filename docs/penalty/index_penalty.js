@@ -93,9 +93,12 @@ function downloadTable() {
 var numRoundsInput = document.getElementById("numRounds");
 
 numRoundsInput.addEventListener("blur", function() {
-    if (numRoundsInput.value > numRoundsInput.max) {
-        numRoundsInput.value = numRoundsInput.max;
-    } else if (numRoundsInput.value < numRoundsInput.min) {
-        numRoundsInput.value = numRoundsInput.min;
-    }
+  const numRounds = parseInt(numRoundsInput.value);
+  if (isNaN(numRounds)) {
+    numRoundsInput.value = numRoundsInput.defaultValue;
+  } else if (numRounds > numRoundsInput.max) {
+    numRoundsInput.value = numRoundsInput.max;
+  } else if (numRounds < numRoundsInput.min) {
+    numRoundsInput.value = numRoundsInput.min;
+  }
 });
