@@ -1,3 +1,36 @@
+function handleCheckboxClick(event) {
+  const checkbox = event.target;
+  const isChecked = checkbox.checked;
+  const row = checkbox.parentNode.parentNode;
+  const rowIndex = row.rowIndex - 1;
+  const playerIndex = checkbox.parentNode.cellIndex - 1;
+  const accuracyCell = document.getElementById(`player-${playerIndex + 1}-accuracy`);
+  const previousAccuracy = Number(accuracyCell.textContent);
+  const fraction = 1 / (row.parentNode.rows.length - 2);
+  const newAccuracy = isChecked ? previousAccuracy + fraction : previousAccuracy - fraction;
+  accuracyCell.textContent = newAccuracy.toFixed(2);
+}
+
+function updateHeader(event) {
+  const headerCell = event.target;
+  headerCell.contentEditable = true;
+  headerCell.innerHTML = "";
+  headerCell.focus();
+  headerCell.addEventListener("blur", function() {
+    if (!headerCell.textContent.trim()) {
+      const playerIndex = headerCell.cellIndex - 1;
+      headerCell.textContent = ["blue", "red", "white", "black"][playerIndex] || `Player ${headerCell.cellIndex}`;
+    }
+    headerCell.contentEditable = false;
+  });
+}
+
+function updateHeaderName(event) {
+  const headerInput = event.target;
+  const headerText = headerInput.value.trim() || `Player ${headerInput.parentNode.cellIndex}`;
+  headerInput.parentNode.innerHTML = headerText;
+}
+
 function generateTable() {
   const table = document.getElementById("scoreTable");
   const numRounds = document.getElementById("numRounds").value;
@@ -12,9 +45,12 @@ function generateTable() {
   const headerRow = table.insertRow(0);
   const roundHeaderCell = headerRow.insertCell(0);
   roundHeaderCell.innerHTML = "Round";
+  const playerNames = ["blue", "red", "white", "black"];
   for (let i = 1; i <= numPlayers; i++) {
     const playerHeaderCell = headerRow.insertCell(i);
-    playerHeaderCell.innerHTML = "Player " + i;
+    playerHeaderCell.innerHTML = playerNames[i-1];
+    playerHeaderCell.addEventListener("click", updateHeader);
+    playerHeaderCell.addEventListener("click", updateHeaderName);
   }
 
   // Create new data rows
@@ -24,7 +60,7 @@ function generateTable() {
     roundCell.innerHTML = i;
     for (let j = 1; j <= numPlayers; j++) {
       const scoreCell = row.insertCell(j);
-      scoreCell.innerHTML = `<input type="checkbox" onclick="calculateFraction()">`;
+      scoreCell.innerHTML = `<input type="checkbox" onclick="handleCheckboxClick(event)">`;
     }
   }
 
@@ -37,30 +73,8 @@ function generateTable() {
     accuracyCell.id = `player-${i}-accuracy`;
     accuracyCell.innerHTML = "0.00";
   }
-
-  // Calculate and display fraction
-  calculateFraction();
 }
 
-function calculateFraction() {
-  const table = document.getElementById("scoreTable");
-  const numRounds = table.rows.length - 2; // Exclude header and accuracy rows
-  const numPlayers = table.rows[0].cells.length - 2; // Exclude round and accuracy columns
-
-  for (let j = 1; j < numPlayers + 2; j++) {
-    let numCheckmarks = 0;
-    for (let i = 1; i < numRounds + 1; i++) {
-      const scoreCell = table.rows[i].cells[j];
-      const checkbox = scoreCell.querySelector('input[type="checkbox"]');
-      if (checkbox.checked) {
-        numCheckmarks++;
-      }
-    }
-    const fraction = numCheckmarks / numRounds;
-    const accuracyCell = table.rows[numRounds + 1].cells[j];
-    accuracyCell.innerHTML = `${(fraction * 100).toFixed(2)}%`;
-  }
-}
 
 function downloadTable() {
   const table = document.getElementById("scoreTable");
