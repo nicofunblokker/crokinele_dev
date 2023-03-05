@@ -1,15 +1,24 @@
 function handleCheckboxClick(event) {
   const checkbox = event.target;
   const isChecked = checkbox.checked;
-  const row = checkbox.parentNode.parentNode;
-  const rowIndex = row.rowIndex - 1;
   const playerIndex = checkbox.parentNode.cellIndex - 1;
-  const accuracyCell = document.getElementById(`player-${playerIndex + 1}-accuracy`);
-  const previousAccuracy = Number(accuracyCell.textContent);
-  const fraction = 1 / (row.parentNode.rows.length - 2);
-  const newAccuracy = isChecked ? previousAccuracy + fraction : previousAccuracy - fraction;
-  accuracyCell.textContent = newAccuracy.toFixed(2);
+  const table = document.getElementById("scoreTable");
+  const numRounds = table.rows.length - 2; // Exclude header and accuracy rows
+  const numPlayers = table.rows[0].cells.length - 2; // Exclude round and accuracy columns
+  let numCheckmarks = 0;
+  for (let i = 1; i < numRounds + 1; i++) {
+    const scoreCell = table.rows[i].cells[playerIndex + 1];
+    const checkbox = scoreCell.querySelector('input[type="checkbox"]');
+    if (checkbox.checked) {
+      numCheckmarks++;
+    }
+  }
+  const fraction = numCheckmarks / numRounds;
+  const accuracyCell = table.rows[numRounds + 1].cells[playerIndex + 1];
+  accuracyCell.innerHTML = `${(fraction).toFixed(2)}`;
 }
+
+
 
 function updateHeader(event) {
   const headerCell = event.target;
