@@ -127,6 +127,14 @@ window.onload = function() {
   if (storedPlayerInputsDiv) {
     playerInputsDiv.innerHTML = storedPlayerInputsDiv;
   }
+
+  // Retrieve the player count from localStorage on page load
+var storedPlayerCount = localStorage.getItem("playerCount");
+if (storedPlayerCount) {
+  const playerCount = parseInt(storedPlayerCount);
+  playerCountInput.value = playerCount;
+  updateTable(playerCount);
+}
 };
 var deleteRoundButton = document.getElementById("delete-round-button");
 
@@ -223,6 +231,37 @@ function reset() {
     localStorage.setItem("round", 0);
 }
 
+// Get the table element and its header row
+const table = document.getElementById("hits");
+const headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
+
+// Function to update the table based on the current player count
+function updateTable(playerCount) {
+
+  localStorage.setItem("playerCount", playerCount);
+  const columns = headerRow.children;
+  
+  // Hide or show the columns based on the current player count
+  for (let i = 0; i < columns.length; i++) {
+    if (i < playerCount) {
+      columns[i].classList.remove("hidden");
+    } else {
+      columns[i].classList.add("hidden");
+    }
+  }
+}
+
+
+
+// Add an event listener to update the table when the playerCount changes
+const playerCountInput = document.getElementById("playerCount"); // Assuming there's an input element with ID "playerCount"
+addPlayerButton.addEventListener("click", function() {
+  const playerCount = parseInt(playerCountInput.value);
+  updateTable(playerCount);
+});
+
+
+
 let firstClick = null;
 const columns = document.querySelectorAll('#hits th');
 
@@ -270,7 +309,14 @@ columns.forEach((column, index) => {
     event.preventDefault(); // prevent the default context menu from showing up
     if (column.textContent.length > 0) {
       column.textContent = column.textContent.slice(0, -1); // remove the last character
-    }
+         // Update local storage with the new table data
+         hitsData = []; // Assign an empty array to reset the hitsData array
+         for (let i = 0; i < columns.length; i++) {
+           const column = columns[i];
+           hitsData.push(column.textContent);
+         }
+         localStorage.setItem('hits', JSON.stringify(hitsData));
+       }
   });
 
   column.addEventListener('touchstart', (event) => {
@@ -313,6 +359,12 @@ columns.forEach((column, index) => {
   
   column.addEventListener('touchend', () => {
     clearTimeout(clickTimeout);
+    hitsData = []; // Assign an empty array to reset the hitsData array
+    for (let i = 0; i < columns.length; i++) {
+      const column = columns[i];
+      hitsData.push(column.textContent);
+    }
+    localStorage.setItem('hits', JSON.stringify(hitsData));
   });
   
   column.addEventListener('touchmove', (event) => {
