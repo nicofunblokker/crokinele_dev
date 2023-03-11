@@ -72,8 +72,21 @@ function calculateResults() {
       alert("Score cannot be empty. Please enter a valid score.");
       return;
     } else if (!isNaN(playerInputs[i].value) && playerInputs[i].value % 5 === 0) {
-      round = localStorage.getItem("round") || 1;
-      round++;
+   
+      var lastRow = resultsTable.rows[resultsTable.rows.length - 1];
+      if (lastRow) {
+        var roundCell = lastRow.cells[0];
+        if (roundCell && !isNaN(parseInt(roundCell.innerHTML))) {
+          round = parseInt(roundCell.innerHTML);
+          round++;
+        } else {
+          round = 1;
+        }
+      } else {
+        round = 1;
+      }
+
+      
       scores.push(playerInputs[i].value);
     } else {
       alert("Score has to be a numeric value and divisible by 5. Please enter a valid score.");
@@ -98,7 +111,7 @@ function calculateResults() {
     }
   }
   localStorage.setItem("results", results.innerHTML);
-  localStorage.setItem("round", round);
+ //localStorage.setItem("round", round);
 }
 
 
@@ -117,11 +130,6 @@ window.onload = function() {
     resultsTable.innerHTML = savedResults;
   }
 
-  // Restore the saved round number from localStorage
-  var savedRound = localStorage.getItem("round");
-  if (savedRound) {
-    round = parseInt(savedRound);
-  }
   var storedPlayerInputsDiv = localStorage.getItem("playerInputsDiv");
   
   if (storedPlayerInputsDiv) {
@@ -160,7 +168,7 @@ function deleteRound() {
     round--;
   }
 
-  localStorage.setItem("round", round);
+  //localStorage.setItem("round", round);
 }
 
 
@@ -228,7 +236,7 @@ calculateTotalButton.addEventListener("click", function () {
 function reset() {
     localStorage.clear();
     location.reload();
-    localStorage.setItem("round", 0);
+    //localStorage.setItem("round", 0);
 }
 
 // Get the table element and its header row
