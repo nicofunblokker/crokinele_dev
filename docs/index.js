@@ -1,6 +1,6 @@
 var playerInputsDiv = document.getElementById("playerInputs");
-var addPlayerButton = document.getElementById("add-player-button");
-var calculateResultsButton = document.getElementById("calculate-results-button");
+//var addPlayerButton = document.getElementById("add-player-button");
+//var calculateResultsButton = document.getElementById("calculate-results-button");
 var calculateTotalButton = document.getElementById("calculate-total-button");
 var resultsTable = document.getElementById("results");
 
