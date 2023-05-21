@@ -402,7 +402,9 @@ columns.forEach((column, index) => {
 var resetButton = document.getElementById("reset-button");
 
 resetButton.addEventListener("click", function () {
-  reset();
+  if (confirm("Are you sure you want to reset?")) {
+    reset();
+  }
 });
 
 
