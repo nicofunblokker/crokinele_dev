@@ -7,6 +7,7 @@ var resultsTable = document.getElementById("results");
 var players = [];
 var round = 0;
 
+
 function addPlayer() {
   var playerCount = document.getElementById("playerCount").value;
 
@@ -115,7 +116,7 @@ function calculateResults() {
 }
 
 
-addPlayerButton.addEventListener("click", function () {
+playerCount.addEventListener("change", function () {
   addPlayer();
 });
 
@@ -236,6 +237,7 @@ calculateTotalButton.addEventListener("click", function () {
 function reset() {
     localStorage.clear();
     location.reload();
+    playerCount.value = "0";
     //localStorage.setItem("round", 0);
 }
 
@@ -263,7 +265,7 @@ function updateTable(playerCount) {
 
 // Add an event listener to update the table when the playerCount changes
 const playerCountInput = document.getElementById("playerCount"); // Assuming there's an input element with ID "playerCount"
-addPlayerButton.addEventListener("click", function() {
+playerCount.addEventListener("change", function () {
   const playerCount = parseInt(playerCountInput.value);
   updateTable(playerCount);
 });
