@@ -53,18 +53,19 @@ function addPlayer() {
 
     playerInputsDiv.appendChild(playerRow);
   }
-
-  // Add event listener to the last score input field
-  var lastScoreInput = playerInputsDiv.lastElementChild.querySelector("input[type='number']");
-  lastScoreInput.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      event.preventDefault(); // Prevent the default form submission behavior
-      calculateResults();
-    }
-  });
-
   localStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
 }
+
+// Add event listener to the playerInputsDiv for keydown events on descendant input fields
+playerInputsDiv.addEventListener("keydown", function(event) {
+  var lastScoreInput = event.target;
+  if (lastScoreInput.matches("input[type='number']") && event.key === "Enter") {
+    event.preventDefault(); // Prevent the default form submission behavior
+    calculateResults();
+  }
+});
+
+
 
 function calculateResults() {
 
