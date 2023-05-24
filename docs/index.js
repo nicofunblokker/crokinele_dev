@@ -418,19 +418,56 @@ downloadJsonButton.addEventListener('click', function() {
   const hitsData = JSON.parse(localStorage.getItem('hits'));
   const resultsHtml = localStorage.getItem('results');
 
-  // Create an object that contains both the results HTML and the hits data
-  const data = {
-    results: resultsHtml,
-    hits: hitsData
-  };
+  // Check if there are no results available
+  if (!resultsHtml) {
+    alert('No table to export.'); // Display an error message
+    return; // Exit the function
+  }
 
-  // Convert the object to a JSON string
-  const jsonData = JSON.stringify(data);
+  // Extract the table rows from the results HTML
+  const resultsTable = document.createElement('table');
+  resultsTable.innerHTML = resultsHtml;
+  const rows = resultsTable.querySelectorAll('tr');
+
+  // Create an array to store the CSV rows
+  const csvRows = [];
+
+  // Convert the "results" HTML table to CSV rows
+  for (let i = 1; i < rows.length; i++) { // Start from index 1 to skip the header row
+    const row = rows[i];
+    const cells = row.querySelectorAll('td');
+    const csvRow = Array.from(cells, cell => cell.textContent).join(',');
+    csvRows.push(csvRow);
+  }
+
+  // Add "hits" data to the corresponding CSV rows
+  if (hitsData && hitsData.length > 0) {
+    let rowIndex = 0; // Track the current row index
+    for (let i = 0; i < hitsData.length; i++) {
+      const hits = hitsData[i] || ''; // Check if hits data exists or set it as an empty string
+      const hitsArray = Array.isArray(hits) ? hits : [hits]; // Convert hits to an array if it's not already
+      for (let j = 0; j < hitsArray.length; j++) {
+        const hitsValue = hitsArray[j];
+        const csvRow = csvRows[rowIndex] ? csvRows[rowIndex].split(',') : []; // Split the existing CSV row into an array
+        csvRow.push(hitsValue);
+        csvRows[rowIndex] = csvRow.join(',');
+        rowIndex++; // Move to the next row index
+      }
+    }
+  } else {
+    // Add empty string to the CSV rows when hitsData is null or empty
+    for (let i = 0; i < csvRows.length; i++) {
+      csvRows[i] += ",";
+    }
+  }
+
+  // Convert the array of CSV rows to a string
+  const csvData = csvRows.join('\n');
 
   // Create a link element
   const link = document.createElement('a');
-  link.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(jsonData));
-  link.setAttribute('download', 'crokinele_results.json');
+  link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvData));
+  link.setAttribute('download', 'crokinele_results.csv');
   link.style.display = 'none';
 
   // Add the link to the DOM
@@ -442,113 +479,3 @@ downloadJsonButton.addEventListener('click', function() {
   // Remove the link from the DOM
   document.body.removeChild(link);
 });
-
-// particlesJS("particles-js", {
-//     particles: {
-//       number: {
-//         value: 100,
-//         density: {
-//           enable: true,
-//           value_area: 800
-//         }
-//       },
-//       color: {
-//         value: "#ffffff"
-//       },
-//       shape: {
-//         type: "circle",
-//         stroke: {
-//           width: 0,
-//           color: "#000000"
-//         },
-//         polygon: {
-//           nb_sides: 5
-//         },
-//         image: {
-//           src: "img/github.svg",
-//           width: 100,
-//           height: 100
-//         }
-//       },
-//       opacity: {
-//         value: 0.5,
-//         random: false,
-//         anim: {
-//           enable: false,
-//           speed: 1,
-//           opacity_min: 0.1,
-//           sync: false
-//         }
-//       },
-//       size: {
-//         value: 3,
-//         random: true,
-//         anim: {
-//           enable: false,
-//           speed: 40,
-//           size_min: 0.1,
-//           sync: false
-//         }
-//       },
-//       line_linked: {
-//         enable: true,
-//         distance: 150,
-//         color: "#ffffff",
-//         opacity: 0.4,
-//         width: 1
-//       },
-//       move: {
-//         enable: true,
-//         speed: 6,
-//         direction: "none",
-//         random: false,
-//         straight: false,
-//         out_mode: "out",
-//         bounce: false,
-//         attract: {
-//           enable: false,
-//           rotateX: 600,
-//           rotateY: 1200
-//         }
-//       }
-//     },
-//     interactivity: {
-//       detect_on: "canvas",
-//       events: {
-//         onhover: {
-//           enable: true,
-//           mode: "repulse"
-//         },
-//         onclick: {
-//           enable: true,
-//           mode: "push"
-//         },
-//         resize: true
-//       },
-//       modes: {
-//         grab: {
-//           distance: 400,
-//           line_linked: {
-//             opacity: 1
-//           }
-//         },
-//         bubble: {
-//           distance: 400,
-//           size: 40,
-//           duration: 2,
-//           opacity: 8,
-//           speed: 3
-//         },
-//         repulse: {
-//           distance: 200,
-//           duration: 0.4
-//         },
-//         push: {
-//           particles_nb: 4
-//         },
-//         remove: {
-//           particles_nb: 2
-//         }
-//       }
-//     },
-// });
