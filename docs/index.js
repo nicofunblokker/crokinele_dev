@@ -57,40 +57,60 @@ function addPlayer() {
 }
 
 // Add event listener to the playerInputsDiv for keydown events on descendant input fields
+var cooldownActive = false; // Flag to track cooldown state
+var cooldownDuration = 1000; // Cooldown duration in milliseconds
+
 playerInputsDiv.addEventListener("keydown", function(event) {
   var lastScoreInput = event.target;
   if (lastScoreInput.matches("input[type='number']") && event.key === "Enter") {
     event.preventDefault(); // Prevent the default form submission behavior
+
+    if (cooldownActive) {
+      // If cooldown is active, do nothing
+      return;
+    }
+
+    cooldownActive = true; // Set cooldown flag
     calculateResults();
+
+    // After the cooldown duration, reset the cooldown flag
+    setTimeout(function() {
+      cooldownActive = false;
+    }, cooldownDuration);
   }
 });
 
 
-
 function calculateResults() {
-
-  var results = document.getElementById("results");
   var scores = [];
   var playerInputs = document.querySelectorAll(".player-input");
 
   for (var i = 0; i < playerInputs.length; i += 2) {
     var playerNames = ["blue", "red", "white", "black"];
     if (playerInputs[i].value === "") {
-      playerInputs[i].value = playerNames[i/2 % playerNames.length];
+      playerInputs[i].value = playerNames[i / 2 % playerNames.length];
     }
   }
+
+  for (var i = resultsTable.rows.length - 1; i >= 0; i--) {
+    var row = resultsTable.rows[i];
+    if (row.cells[0].innerHTML === "Total") {
+      resultsTable.deleteRow(i);
+    }
+  }
+
   for (var i = 1; i < playerInputs.length; i += 2) {
     if (playerInputs[i].value === "") {
       alert("Score cannot be empty. Please enter a valid score.");
       return;
     } else if (!isNaN(playerInputs[i].value) && playerInputs[i].value % 5 === 0) {
-   
+      // Calculate the round counter
+      var round;
       var lastRow = resultsTable.rows[resultsTable.rows.length - 1];
       if (lastRow) {
         var roundCell = lastRow.cells[0];
         if (roundCell && !isNaN(parseInt(roundCell.innerHTML))) {
-          round = parseInt(roundCell.innerHTML);
-          round++;
+          round = parseInt(roundCell.innerHTML) + 1;
         } else {
           round = 1;
         }
@@ -98,13 +118,16 @@ function calculateResults() {
         round = 1;
       }
 
-      
+      // Rest of the code to calculate scores and add rows to the table...
       scores.push(playerInputs[i].value);
     } else {
       alert("Score has to be a numeric value and divisible by 5. Please enter a valid score.");
       return;
     }
   }
+
+
+
 
 
 
@@ -196,6 +219,13 @@ function calculateTotal() {
   let maxScore = 0;
   let maxScoreRows = [];
   let zeroScoreRows = [];
+
+  for (var i = resultsTable.rows.length - 1; i >= 0; i--) {
+    var row = resultsTable.rows[i];
+    if (row.cells[0].innerHTML === "Total") {
+      resultsTable.deleteRow(i);
+    }
+  }
 
   for (let i = 1; i < rows.length; i++) {
     let row = rows[i];
