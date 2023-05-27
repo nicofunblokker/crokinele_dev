@@ -509,3 +509,76 @@ downloadJsonButton.addEventListener('click', function() {
   // Remove the link from the DOM
   document.body.removeChild(link);
 });
+
+
+// add button to store results locally
+// Get a reference to the button element
+const storeButton = document.getElementById('store-button');
+
+// Attach a click event listener to the button
+storeButton.addEventListener('click', function() {
+  // Retrieve data from sessionStorage
+  const hitsData = JSON.parse(sessionStorage.getItem('hits'));
+  const resultsHtml = sessionStorage.getItem('results');
+
+  // Check if there are no results available
+  if (!resultsHtml) {
+    alert('No table to export.'); // Display an error message
+    return; // Exit the function
+  }
+
+  // Extract the table rows from the results HTML
+  const resultsTable = document.createElement('table');
+  resultsTable.innerHTML = resultsHtml;
+  const rows = resultsTable.querySelectorAll('tr');
+
+  // Create an array to store the CSV rows
+  const csvRows = [];
+
+  // Convert the "results" HTML table to CSV rows
+  for (let i = 1; i < rows.length; i++) { // Start from index 1 to skip the header row
+    const row = rows[i];
+    const cells = row.querySelectorAll('td');
+    const csvRow = Array.from(cells, cell => cell.textContent).join(',');
+    csvRows.push(csvRow);
+  }
+
+  // Add "hits" data to the corresponding CSV rows
+  if (hitsData && hitsData.length > 0) {
+    let rowIndex = 0; // Track the current row index
+    for (let i = 0; i < hitsData.length; i++) {
+      const hits = hitsData[i] || ''; // Check if hits data exists or set it as an empty string
+      const hitsArray = Array.isArray(hits) ? hits : [hits]; // Convert hits to an array if it's not already
+      for (let j = 0; j < hitsArray.length; j++) {
+        const hitsValue = hitsArray[j];
+        const csvRow = csvRows[rowIndex] ? csvRows[rowIndex].split(',') : []; // Split the existing CSV row into an array
+        csvRow.push(hitsValue);
+        csvRows[rowIndex] = csvRow.join(',');
+        rowIndex++; // Move to the next row index
+      }
+    }
+  } else {
+    // Add empty string to the CSV rows when hitsData is null or empty
+    for (let i = 0; i < csvRows.length; i++) {
+      csvRows[i] += ",";
+    }
+  }
+
+  // Convert the array of CSV rows to a string
+  const csvData = csvRows.join('\n');
+
+  // Create a link element
+  const link = document.createElement('a');
+  link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvData));
+  link.setAttribute('download', 'crokinele_results.csv');
+  link.style.display = 'none';
+
+  // Add the link to the DOM
+  document.body.appendChild(link);
+
+  // Simulate a click on the link to download the file
+  link.click();
+
+  // Remove the link from the DOM
+  document.body.removeChild(link);
+});
