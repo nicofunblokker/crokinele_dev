@@ -539,7 +539,7 @@ storeButton.addEventListener('click', function() {
     }
   }
 
-  // Copy the data from sessionStorage to localStorage and add the "gameID" column
+  // Copy the data from sessionStorage to localStorage and add the "gameID" and "timestamp" columns
   let localStorageData = JSON.parse(localStorage.getItem('csvData'));
   if (!localStorageData) {
     localStorageData = []; // Initialize as an empty array if localStorageData is null
@@ -551,10 +551,13 @@ storeButton.addEventListener('click', function() {
     gameID = 1; // Set the initial gameID as 1
   }
 
-  // Add "gameID" and hits to each row
+  const timestamp = new Date().toISOString(); // Get the current timestamp in ISO format
+
+  // Add "gameID", "timestamp", and hits to each row
   for (let i = 0; i < csvRows.length; i++) {
     const csvRow = csvRows[i].split(',');
-    csvRow.unshift(gameID.toString()); // Add the gameID as the first column
+    csvRow.unshift(timestamp); // Add the timestamp as the first column
+    csvRow.unshift(gameID.toString()); // Add the gameID as the second column
     localStorageData.push(csvRow);
   }
 
@@ -566,3 +569,4 @@ storeButton.addEventListener('click', function() {
 
   // Optional: Update any UI elements or perform additional actions
 });
+
