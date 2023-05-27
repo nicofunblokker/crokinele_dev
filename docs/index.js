@@ -445,38 +445,52 @@ const downloadJsonButton = document.getElementById('download-json-button');
 
 // Attach a click event listener to the download button
 downloadJsonButton.addEventListener('click', function() {
-  // Retrieve data from localStorage
-  const localStorageData = JSON.parse(localStorage.getItem('csvData'));
+  const action = prompt("Do you want to 'download' or 'reset' localStorage?");
+  
+  if (action === 'download') {
+    // Retrieve data from localStorage
+    const localStorageData = JSON.parse(localStorage.getItem('csvData'));
 
-  // Check if there are no stored results
-  if (!localStorageData || localStorageData.length === 0) {
-    alert('No stored results available.'); // Display an error message
-    return; // Exit the function
+    // Check if there are no stored results
+    if (!localStorageData || localStorageData.length === 0) {
+      alert('No stored results available.'); // Display an error message
+      return; // Exit the function
+    }
+
+    // Convert the data to CSV format
+    const csvRows = [];
+    for (let i = 0; i < localStorageData.length; i++) {
+      const csvRow = localStorageData[i].join(',');
+      csvRows.push(csvRow);
+    }
+    const csvData = csvRows.join('\n');
+
+    // Create a link element
+    const link = document.createElement('a');
+    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvData));
+    link.setAttribute('download', 'stored_results.csv');
+    link.style.display = 'none';
+
+    // Add the link to the DOM
+    document.body.appendChild(link);
+
+    // Simulate a click on the link to download the file
+    link.click();
+
+    // Remove the link from the DOM
+    document.body.removeChild(link);
+  } else if (action === 'reset') {
+    const resetConfirmation = confirm("Are you sure you want to reset localStorage? This action cannot be undone.");
+    if (resetConfirmation) {
+      // Reset localStorage
+      localStorage.clear();
+      alert('localStorage has been reset.');
+    }
+  } else {
+    alert('Invalid action. Please choose either "download" or "reset".');
   }
-
-  // Convert the data to CSV format
-  const csvRows = [];
-  for (let i = 0; i < localStorageData.length; i++) {
-    const csvRow = localStorageData[i].join(',');
-    csvRows.push(csvRow);
-  }
-  const csvData = csvRows.join('\n');
-
-  // Create a link element
-  const link = document.createElement('a');
-  link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvData));
-  link.setAttribute('download', 'stored_results.csv');
-  link.style.display = 'none';
-
-  // Add the link to the DOM
-  document.body.appendChild(link);
-
-  // Simulate a click on the link to download the file
-  link.click();
-
-  // Remove the link from the DOM
-  document.body.removeChild(link);
 });
+
 
 
 
