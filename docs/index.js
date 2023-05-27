@@ -53,7 +53,7 @@ function addPlayer() {
 
     playerInputsDiv.appendChild(playerRow);
   }
-  localStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
+  sessionStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
 }
 
 // Add event listener to the playerInputsDiv for keydown events on descendant input fields
@@ -145,8 +145,8 @@ function calculateResults() {
       row.classList.add("winner");
     }
   }
-  localStorage.setItem("results", results.innerHTML);
- //localStorage.setItem("round", round);
+  sessionStorage.setItem("results", results.innerHTML);
+ //sessionStorage.setItem("round", round);
 }
 
 
@@ -159,20 +159,20 @@ playerCount.addEventListener("change", function () {
 //});
 
 window.onload = function() {
-  // Restore the saved results from localStorage
-  var savedResults = localStorage.getItem("results");
+  // Restore the saved results from sessionStorage
+  var savedResults = sessionStorage.getItem("results");
   if (savedResults) {
     resultsTable.innerHTML = savedResults;
   }
 
-  var storedPlayerInputsDiv = localStorage.getItem("playerInputsDiv");
+  var storedPlayerInputsDiv = sessionStorage.getItem("playerInputsDiv");
   
   if (storedPlayerInputsDiv) {
     playerInputsDiv.innerHTML = storedPlayerInputsDiv;
   }
 
-  // Retrieve the player count from localStorage on page load
-var storedPlayerCount = localStorage.getItem("playerCount");
+  // Retrieve the player count from sessionStorage on page load
+var storedPlayerCount = sessionStorage.getItem("playerCount");
 if (storedPlayerCount) {
   const playerCount = parseInt(storedPlayerCount);
   playerCountInput.value = playerCount;
@@ -203,7 +203,7 @@ function deleteRound() {
     round--;
   }
 
-  //localStorage.setItem("round", round);
+  //sessionStorage.setItem("round", round);
 }
 
 
@@ -276,10 +276,10 @@ calculateTotalButton.addEventListener("click", function () {
 });
 
 function reset() {
-    localStorage.clear();
+    sessionStorage.clear();
     location.reload();
     playerCount.value = "0";
-    //localStorage.setItem("round", 0);
+    //sessionStorage.setItem("round", 0);
 }
 
 // Get the table element and its header row
@@ -289,7 +289,7 @@ const headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("t
 // Function to update the table based on the current player count
 function updateTable(playerCount) {
 
-  localStorage.setItem("playerCount", playerCount);
+  sessionStorage.setItem("playerCount", playerCount);
   const columns = headerRow.children;
   
   // Hide or show the columns based on the current player count
@@ -317,7 +317,7 @@ let firstClick = null;
 const columns = document.querySelectorAll('#hits th');
 
 // Check if there is any data in the local storage for "hits" table
-const storedData = localStorage.getItem('hits');
+const storedData = sessionStorage.getItem('hits');
 if (storedData) {
   // If there is data in the local storage, update the table with it
   const hitsData = JSON.parse(storedData);
@@ -352,7 +352,7 @@ columns.forEach((column, index) => {
         const column = columns[i];
         hitsData.push(column.textContent);
       }
-      localStorage.setItem('hits', JSON.stringify(hitsData));
+      sessionStorage.setItem('hits', JSON.stringify(hitsData));
     }
   });
 
@@ -366,7 +366,7 @@ columns.forEach((column, index) => {
            const column = columns[i];
            hitsData.push(column.textContent);
          }
-         localStorage.setItem('hits', JSON.stringify(hitsData));
+         sessionStorage.setItem('hits', JSON.stringify(hitsData));
        }
   });
 
@@ -402,7 +402,7 @@ columns.forEach((column, index) => {
           const column = columns[i];
           hitsData.push(column.textContent);
         }
-        localStorage.setItem('hits', JSON.stringify(hitsData));
+        sessionStorage.setItem('hits', JSON.stringify(hitsData));
       }
     }
     event.preventDefault(); // prevent the default touch event
@@ -415,7 +415,7 @@ columns.forEach((column, index) => {
       const column = columns[i];
       hitsData.push(column.textContent);
     }
-    localStorage.setItem('hits', JSON.stringify(hitsData));
+    sessionStorage.setItem('hits', JSON.stringify(hitsData));
   });
   
   column.addEventListener('touchmove', (event) => {
@@ -444,9 +444,9 @@ const downloadJsonButton = document.getElementById('download-json-button');
 
 // Attach a click event listener to the button
 downloadJsonButton.addEventListener('click', function() {
-  // Retrieve data from localStorage
-  const hitsData = JSON.parse(localStorage.getItem('hits'));
-  const resultsHtml = localStorage.getItem('results');
+  // Retrieve data from sessionStorage
+  const hitsData = JSON.parse(sessionStorage.getItem('hits'));
+  const resultsHtml = sessionStorage.getItem('results');
 
   // Check if there are no results available
   if (!resultsHtml) {
