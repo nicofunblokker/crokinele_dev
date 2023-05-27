@@ -439,65 +439,33 @@ resetButton.addEventListener("click", function () {
 
 
 
-// Get a reference to the button element
+
+// Add button to download stored results as CSV
 const downloadJsonButton = document.getElementById('download-json-button');
 
-// Attach a click event listener to the button
+// Attach a click event listener to the download button
 downloadJsonButton.addEventListener('click', function() {
-  // Retrieve data from sessionStorage
-  const hitsData = JSON.parse(sessionStorage.getItem('hits'));
-  const resultsHtml = sessionStorage.getItem('results');
+  // Retrieve data from localStorage
+  const localStorageData = JSON.parse(localStorage.getItem('csvData'));
 
-  // Check if there are no results available
-  if (!resultsHtml) {
-    alert('No table to export.'); // Display an error message
+  // Check if there are no stored results
+  if (!localStorageData || localStorageData.length === 0) {
+    alert('No stored results available.'); // Display an error message
     return; // Exit the function
   }
 
-  // Extract the table rows from the results HTML
-  const resultsTable = document.createElement('table');
-  resultsTable.innerHTML = resultsHtml;
-  const rows = resultsTable.querySelectorAll('tr');
-
-  // Create an array to store the CSV rows
+  // Convert the data to CSV format
   const csvRows = [];
-
-  // Convert the "results" HTML table to CSV rows
-  for (let i = 1; i < rows.length; i++) { // Start from index 1 to skip the header row
-    const row = rows[i];
-    const cells = row.querySelectorAll('td');
-    const csvRow = Array.from(cells, cell => cell.textContent).join(',');
+  for (let i = 0; i < localStorageData.length; i++) {
+    const csvRow = localStorageData[i].join(',');
     csvRows.push(csvRow);
   }
-
-  // Add "hits" data to the corresponding CSV rows
-  if (hitsData && hitsData.length > 0) {
-    let rowIndex = 0; // Track the current row index
-    for (let i = 0; i < hitsData.length; i++) {
-      const hits = hitsData[i] || ''; // Check if hits data exists or set it as an empty string
-      const hitsArray = Array.isArray(hits) ? hits : [hits]; // Convert hits to an array if it's not already
-      for (let j = 0; j < hitsArray.length; j++) {
-        const hitsValue = hitsArray[j];
-        const csvRow = csvRows[rowIndex] ? csvRows[rowIndex].split(',') : []; // Split the existing CSV row into an array
-        csvRow.push(hitsValue);
-        csvRows[rowIndex] = csvRow.join(',');
-        rowIndex++; // Move to the next row index
-      }
-    }
-  } else {
-    // Add empty string to the CSV rows when hitsData is null or empty
-    for (let i = 0; i < csvRows.length; i++) {
-      csvRows[i] += ",";
-    }
-  }
-
-  // Convert the array of CSV rows to a string
   const csvData = csvRows.join('\n');
 
   // Create a link element
   const link = document.createElement('a');
   link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvData));
-  link.setAttribute('download', 'crokinele_results.csv');
+  link.setAttribute('download', 'stored_results.csv');
   link.style.display = 'none';
 
   // Add the link to the DOM
@@ -509,6 +477,7 @@ downloadJsonButton.addEventListener('click', function() {
   // Remove the link from the DOM
   document.body.removeChild(link);
 });
+
 
 
 // add button to store results locally
@@ -543,42 +512,47 @@ storeButton.addEventListener('click', function() {
     csvRows.push(csvRow);
   }
 
-  // Add "hits" data to the corresponding CSV rows
+  // Copy the data from sessionStorage to localStorage and add the "gameID" column
+  let localStorageData = JSON.parse(localStorage.getItem('csvData'));
+  if (!localStorageData) {
+    localStorageData = []; // Initialize as an empty array if localStorageData is null
+  }
+  let gameID;
+  if (localStorageData.length > 0) {
+    gameID = parseInt(localStorageData[localStorageData.length - 1][0]) + 1; // Increment the previous gameID by 1
+  } else {
+    gameID = 1; // Set the initial gameID as 1
+  }
+
+  // Add "gameID" to each row
+  for (let i = 0; i < csvRows.length; i++) {
+    const csvRow = csvRows[i].split(',');
+    csvRow.unshift(gameID.toString()); // Add the gameID as the first column
+    localStorageData.push(csvRow);
+  }
+
+  // Add "hits" data to the corresponding rows
   if (hitsData && hitsData.length > 0) {
-    let rowIndex = 0; // Track the current row index
-    for (let i = 0; i < hitsData.length; i++) {
+    const maxRows = Math.min(csvRows.length, hitsData.length); // Determine the maximum number of rows to consider
+    for (let i = 0; i < maxRows; i++) {
       const hits = hitsData[i] || ''; // Check if hits data exists or set it as an empty string
       const hitsArray = Array.isArray(hits) ? hits : [hits]; // Convert hits to an array if it's not already
       for (let j = 0; j < hitsArray.length; j++) {
         const hitsValue = hitsArray[j];
-        const csvRow = csvRows[rowIndex] ? csvRows[rowIndex].split(',') : []; // Split the existing CSV row into an array
+        const csvRow = localStorageData[i] ? localStorageData[i] : []; // Get the corresponding CSV row
         csvRow.push(hitsValue);
-        csvRows[rowIndex] = csvRow.join(',');
-        rowIndex++; // Move to the next row index
+        localStorageData[i] = csvRow;
       }
-    }
-  } else {
-    // Add empty string to the CSV rows when hitsData is null or empty
-    for (let i = 0; i < csvRows.length; i++) {
-      csvRows[i] += ",";
     }
   }
 
-  // Convert the array of CSV rows to a string
-  const csvData = csvRows.join('\n');
+  // Save the updated data to localStorage
+  localStorage.setItem('csvData', JSON.stringify(localStorageData));
 
-  // Create a link element
-  const link = document.createElement('a');
-  link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvData));
-  link.setAttribute('download', 'crokinele_results.csv');
-  link.style.display = 'none';
+  // Display success message
+  alert('Results stored locally.');
 
-  // Add the link to the DOM
-  document.body.appendChild(link);
-
-  // Simulate a click on the link to download the file
-  link.click();
-
-  // Remove the link from the DOM
-  document.body.removeChild(link);
+  // Optional: Update any UI elements or perform additional actions
 });
+
+
