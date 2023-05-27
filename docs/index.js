@@ -492,8 +492,6 @@ downloadJsonButton.addEventListener('click', function() {
 });
 
 
-
-
 // add button to store results locally
 // Get a reference to the button element
 const storeButton = document.getElementById('store-button');
@@ -526,6 +524,21 @@ storeButton.addEventListener('click', function() {
     csvRows.push(csvRow);
   }
 
+  // Add "hits" data to the corresponding rows
+  if (hitsData && hitsData.length > 0) {
+    const maxRows = Math.min(csvRows.length, hitsData.length); // Determine the maximum number of rows to consider
+    for (let i = 0; i < maxRows; i++) {
+      const hits = hitsData[i] || ''; // Check if hits data exists or set it as an empty string
+      const hitsArray = Array.isArray(hits) ? hits : [hits]; // Convert hits to an array if it's not already
+      for (let j = 0; j < hitsArray.length; j++) {
+        const hitsValue = hitsArray[j];
+        const csvRow = csvRows[i].split(','); // Get the corresponding CSV row
+        csvRow.push(hitsValue);
+        csvRows[i] = csvRow.join(',');
+      }
+    }
+  }
+
   // Copy the data from sessionStorage to localStorage and add the "gameID" column
   let localStorageData = JSON.parse(localStorage.getItem('csvData'));
   if (!localStorageData) {
@@ -538,26 +551,11 @@ storeButton.addEventListener('click', function() {
     gameID = 1; // Set the initial gameID as 1
   }
 
-  // Add "gameID" to each row
+  // Add "gameID" and hits to each row
   for (let i = 0; i < csvRows.length; i++) {
     const csvRow = csvRows[i].split(',');
     csvRow.unshift(gameID.toString()); // Add the gameID as the first column
     localStorageData.push(csvRow);
-  }
-
-  // Add "hits" data to the corresponding rows
-  if (hitsData && hitsData.length > 0) {
-    const maxRows = Math.min(csvRows.length, hitsData.length); // Determine the maximum number of rows to consider
-    for (let i = 0; i < maxRows; i++) {
-      const hits = hitsData[i] || ''; // Check if hits data exists or set it as an empty string
-      const hitsArray = Array.isArray(hits) ? hits : [hits]; // Convert hits to an array if it's not already
-      for (let j = 0; j < hitsArray.length; j++) {
-        const hitsValue = hitsArray[j];
-        const csvRow = localStorageData[i] ? localStorageData[i] : []; // Get the corresponding CSV row
-        csvRow.push(hitsValue);
-        localStorageData[i] = csvRow;
-      }
-    }
   }
 
   // Save the updated data to localStorage
@@ -568,5 +566,3 @@ storeButton.addEventListener('click', function() {
 
   // Optional: Update any UI elements or perform additional actions
 });
-
-
