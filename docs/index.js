@@ -445,9 +445,9 @@ const downloadJsonButton = document.getElementById('download-json-button');
 
 // Attach a click event listener to the download button
 downloadJsonButton.addEventListener('click', function() {
-  const action = prompt("Do you want to 'download' or 'reset' localStorage?");
+  const action = prompt("Do you want to 'download' (1) or 'reset' (2)?");
   
-  if (action === 'download') {
+  if (action === '1') {
     // Retrieve data from localStorage
     const localStorageData = JSON.parse(localStorage.getItem('csvData'));
 
@@ -479,7 +479,7 @@ downloadJsonButton.addEventListener('click', function() {
 
     // Remove the link from the DOM
     document.body.removeChild(link);
-  } else if (action === 'reset') {
+  } else if (action === '2') {
     const resetConfirmation = confirm("Are you sure you want to reset localStorage? This action cannot be undone.");
     if (resetConfirmation) {
       // Reset localStorage
