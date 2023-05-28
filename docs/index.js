@@ -73,6 +73,8 @@ playerInputsDiv.addEventListener("keydown", function(event) {
     cooldownActive = true; // Set cooldown flag
     calculateResults();
 
+    lastScoreInput.blur(); // Lose focus on the input field
+
     // After the cooldown duration, reset the cooldown flag
     setTimeout(function() {
       cooldownActive = false;
@@ -445,7 +447,7 @@ const downloadJsonButton = document.getElementById('download-json-button');
 
 // Attach a click event listener to the download button
 downloadJsonButton.addEventListener('click', function() {
-  const action = prompt("Do you want to 'download' (1) or 'reset' (2)?");
+  const action = prompt("Do you want to download (1) or reset (2)?");
   
   if (action === '1') {
     // Retrieve data from localStorage
