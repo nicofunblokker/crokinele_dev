@@ -7,10 +7,10 @@ var resultsTable = document.getElementById("results");
 var players = [];
 var round = 0;
 
-window.addEventListener('beforeunload', function(event) {
-  event.preventDefault();
-  event.returnValue = ''; // Required for Chrome and Edge
-});
+//window.addEventListener('beforeunload', function(event) {
+// event.preventDefault();
+//  event.returnValue = ''; // Required for Chrome and Edge
+//});
 
 
 function addPlayer() {
