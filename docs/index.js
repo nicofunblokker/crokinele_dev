@@ -434,10 +434,18 @@ columns.forEach((column, index) => {
 var resetButton = document.getElementById("reset-button");
 
 resetButton.addEventListener("click", function () {
-  if (confirm("Are you sure you want to reset?")) {
-    reset();
+  const action = prompt("Save results before starting new game (1) or reset (2)?");
+  if (action === '1') {
+      storeButton.click(); // Simulate a click on the "storeButton" to save the game
+      reset();
+  } else if (action === '2') {
+      reset();
+  } else {
+      // User clicked cancel or entered an invalid option
+      // No action needed
   }
 });
+
 
 
 
@@ -470,7 +478,7 @@ downloadJsonButton.addEventListener('click', function() {
     // Create a link element
     const link = document.createElement('a');
     link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvData));
-    link.setAttribute('download', 'stored_results.csv');
+    link.setAttribute('download', 'crokinele_results.csv');
     link.style.display = 'none';
 
     // Add the link to the DOM
@@ -497,6 +505,7 @@ downloadJsonButton.addEventListener('click', function() {
 // add button to store results locally
 // Get a reference to the button element
 const storeButton = document.getElementById('store-button');
+storeButton.style.display = 'none';
 
 // Attach a click event listener to the button
 storeButton.addEventListener('click', function() {
