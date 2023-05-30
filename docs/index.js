@@ -7,11 +7,27 @@ var resultsTable = document.getElementById("results");
 var players = [];
 var round = 0;
 
-//window.addEventListener('beforeunload', function(event) {
-// event.preventDefault();
-//  event.returnValue = ''; // Required for Chrome and Edge
-//});
+function updateGameIDLabel() {
+  // Retrieve the csvData from local storage
+  var csvData = JSON.parse(localStorage.getItem('csvData'));
 
+  // Set the default value for highestGameID
+  var highestGameID = 0;
+
+  // Check if csvData exists
+  if (csvData && csvData.length > 0) {
+    // Find the highest gameID
+    for (var i = 0; i < csvData.length; i++) {
+      var gameID_v2 = parseInt(csvData[i][0]);
+      if (gameID_v2 > highestGameID) {
+        highestGameID = gameID_v2;
+      }
+    }
+  }
+
+  // Set the highest gameID as the label for the button
+  document.getElementById('game-id').textContent = highestGameID.toString();
+}
 
 function addPlayer() {
   var playerCount = document.getElementById("playerCount").value;
@@ -171,7 +187,7 @@ window.onload = function() {
   if (savedResults) {
     resultsTable.innerHTML = savedResults;
   }
-
+  updateGameIDLabel();
   var storedPlayerInputsDiv = sessionStorage.getItem("playerInputsDiv");
   
   if (storedPlayerInputsDiv) {
@@ -499,6 +515,7 @@ downloadJsonButton.addEventListener('click', function() {
     if (resetConfirmation) {
       // Reset localStorage
       localStorage.clear();
+      updateGameIDLabel()
       alert('localStorage has been reset.');
     }
   } else {
@@ -584,5 +601,6 @@ storeButton.addEventListener('click', function() {
   alert('Results stored locally.');
 
   // Optional: Update any UI elements or perform additional actions
+
 });
 
