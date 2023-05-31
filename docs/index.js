@@ -7,6 +7,27 @@ var resultsTable = document.getElementById("results");
 var players = [];
 var round = 0;
 
+function updateGameIDLabel() {
+  // Retrieve the csvData from local storage
+  var csvData = JSON.parse(localStorage.getItem('csvData'));
+
+  // Set the default value for highestGameID
+  var highestGameID = 0;
+
+  // Check if csvData exists
+  if (csvData && csvData.length > 0) {
+    // Find the highest gameID
+    for (var i = 0; i < csvData.length; i++) {
+      var gameID_v2 = parseInt(csvData[i][0]);
+      if (gameID_v2 > highestGameID) {
+        highestGameID = gameID_v2;
+      }
+    }
+  }
+
+  // Set the highest gameID as the label for the button
+  document.getElementById('game-id').textContent = highestGameID.toString();
+}
 
 function addPlayer() {
   var playerCount = document.getElementById("playerCount").value;
@@ -53,7 +74,7 @@ function addPlayer() {
 
     playerInputsDiv.appendChild(playerRow);
   }
-  localStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
+  sessionStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
 }
 
 // Add event listener to the playerInputsDiv for keydown events on descendant input fields
@@ -72,6 +93,8 @@ playerInputsDiv.addEventListener("keydown", function(event) {
 
     cooldownActive = true; // Set cooldown flag
     calculateResults();
+
+    lastScoreInput.blur(); // Lose focus on the input field
 
     // After the cooldown duration, reset the cooldown flag
     setTimeout(function() {
@@ -145,8 +168,8 @@ function calculateResults() {
       row.classList.add("winner");
     }
   }
-  localStorage.setItem("results", results.innerHTML);
- //localStorage.setItem("round", round);
+  sessionStorage.setItem("results", results.innerHTML);
+ //sessionStorage.setItem("round", round);
 }
 
 
@@ -159,20 +182,20 @@ playerCount.addEventListener("change", function () {
 //});
 
 window.onload = function() {
-  // Restore the saved results from localStorage
-  var savedResults = localStorage.getItem("results");
+  // Restore the saved results from sessionStorage
+  var savedResults = sessionStorage.getItem("results");
   if (savedResults) {
     resultsTable.innerHTML = savedResults;
   }
-
-  var storedPlayerInputsDiv = localStorage.getItem("playerInputsDiv");
+  updateGameIDLabel();
+  var storedPlayerInputsDiv = sessionStorage.getItem("playerInputsDiv");
   
   if (storedPlayerInputsDiv) {
     playerInputsDiv.innerHTML = storedPlayerInputsDiv;
   }
 
-  // Retrieve the player count from localStorage on page load
-var storedPlayerCount = localStorage.getItem("playerCount");
+  // Retrieve the player count from sessionStorage on page load
+var storedPlayerCount = sessionStorage.getItem("playerCount");
 if (storedPlayerCount) {
   const playerCount = parseInt(storedPlayerCount);
   playerCountInput.value = playerCount;
@@ -203,7 +226,7 @@ function deleteRound() {
     round--;
   }
 
-  //localStorage.setItem("round", round);
+  //sessionStorage.setItem("round", round);
 }
 
 
@@ -276,10 +299,10 @@ calculateTotalButton.addEventListener("click", function () {
 });
 
 function reset() {
-    localStorage.clear();
+    sessionStorage.clear();
     location.reload();
     playerCount.value = "0";
-    //localStorage.setItem("round", 0);
+    //sessionStorage.setItem("round", 0);
 }
 
 // Get the table element and its header row
@@ -289,7 +312,7 @@ const headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("t
 // Function to update the table based on the current player count
 function updateTable(playerCount) {
 
-  localStorage.setItem("playerCount", playerCount);
+  sessionStorage.setItem("playerCount", playerCount);
   const columns = headerRow.children;
   
   // Hide or show the columns based on the current player count
@@ -317,7 +340,7 @@ let firstClick = null;
 const columns = document.querySelectorAll('#hits th');
 
 // Check if there is any data in the local storage for "hits" table
-const storedData = localStorage.getItem('hits');
+const storedData = sessionStorage.getItem('hits');
 if (storedData) {
   // If there is data in the local storage, update the table with it
   const hitsData = JSON.parse(storedData);
@@ -352,7 +375,7 @@ columns.forEach((column, index) => {
         const column = columns[i];
         hitsData.push(column.textContent);
       }
-      localStorage.setItem('hits', JSON.stringify(hitsData));
+      sessionStorage.setItem('hits', JSON.stringify(hitsData));
     }
   });
 
@@ -366,7 +389,7 @@ columns.forEach((column, index) => {
            const column = columns[i];
            hitsData.push(column.textContent);
          }
-         localStorage.setItem('hits', JSON.stringify(hitsData));
+         sessionStorage.setItem('hits', JSON.stringify(hitsData));
        }
   });
 
@@ -402,7 +425,7 @@ columns.forEach((column, index) => {
           const column = columns[i];
           hitsData.push(column.textContent);
         }
-        localStorage.setItem('hits', JSON.stringify(hitsData));
+        sessionStorage.setItem('hits', JSON.stringify(hitsData));
       }
     }
     event.preventDefault(); // prevent the default touch event
@@ -415,7 +438,7 @@ columns.forEach((column, index) => {
       const column = columns[i];
       hitsData.push(column.textContent);
     }
-    localStorage.setItem('hits', JSON.stringify(hitsData));
+    sessionStorage.setItem('hits', JSON.stringify(hitsData));
   });
   
   column.addEventListener('touchmove', (event) => {
@@ -431,22 +454,131 @@ columns.forEach((column, index) => {
 
 var resetButton = document.getElementById("reset-button");
 
+const myDialog = document.getElementById("myDialog");
+const option1Button = document.getElementById("option1");
+const option2Button = document.getElementById("option2");
+const option3Button = document.getElementById("option3");
+
 resetButton.addEventListener("click", function () {
-  if (confirm("Are you sure you want to reset?")) {
-    reset();
+  myDialog.style.display = "block";
+});
+
+option1Button.onclick = () => {
+  storeButton.click();
+  reset();
+  myDialog.style.display = "none";
+};
+
+option2Button.onclick = () => {
+  reset();
+  myDialog.style.display = "none";
+};
+
+option3Button.onclick = () => {
+  myDialog.style.display = "none";
+};
+
+document.addEventListener("mousedown", function (event) {
+  const target = event.target;
+  if (myDialog.style.display === "block" && !myDialog.contains(target)) {
+    myDialog.style.display = "none";
   }
 });
 
 
-
-// Get a reference to the button element
+// Add button to download stored results as CSV
 const downloadJsonButton = document.getElementById('download-json-button');
 
-// Attach a click event listener to the button
+// Attach a click event listener to the download button
 downloadJsonButton.addEventListener('click', function() {
-  // Retrieve data from localStorage
-  const hitsData = JSON.parse(localStorage.getItem('hits'));
-  const resultsHtml = localStorage.getItem('results');
+  const myDialog2 = document.getElementById("myDialog2");
+  const option4Button = document.getElementById("option4");
+  const option5Button = document.getElementById("option5");
+  const option6Button = document.getElementById("option6");
+
+  myDialog2.style.display = "block"; // Display the dialogue box
+
+  option4Button.onclick = () => {
+    const action = '1';
+    handleAction(action);
+    myDialog2.style.display = "none"; // Hide the dialogue box
+  };
+
+  option5Button.onclick = () => {
+    const action = '2';
+    handleAction(action);
+    myDialog2.style.display = "none"; // Hide the dialogue box
+  };
+
+  option6Button.onclick = () => {
+    myDialog2.style.display = "none"; // Hide the dialogue box
+  };
+});
+
+function handleAction(action) {
+  if (action === '1') {
+    // Retrieve data from localStorage
+    const localStorageData = JSON.parse(localStorage.getItem('csvData'));
+
+    // Check if there are no stored results
+    if (!localStorageData || localStorageData.length === 0) {
+      alert('No stored results available.'); // Display an error message
+      return; // Exit the function
+    }
+
+    // Convert the data to CSV format
+    const csvRows = [];
+    for (let i = 0; i < localStorageData.length; i++) {
+      const csvRow = localStorageData[i].join(',');
+      csvRows.push(csvRow);
+    }
+    const csvData = csvRows.join('\n');
+
+    // Create a link element
+    const link = document.createElement('a');
+    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvData));
+    link.setAttribute('download', 'crokinele_results.csv');
+    link.style.display = 'none';
+
+    // Add the link to the DOM
+    document.body.appendChild(link);
+
+    // Simulate a click on the link to download the file
+    link.click();
+
+    // Remove the link from the DOM
+    document.body.removeChild(link);
+  } else if (action === '2') {
+    const resetConfirmation = confirm("Are you sure you want to reset localStorage? This action cannot be undone.");
+    if (resetConfirmation) {
+      // Reset localStorage
+      localStorage.clear();
+      updateGameIDLabel();
+      alert('localStorage has been reset.');
+    }
+  } else {
+    alert('Invalid action. Please choose either "download" or "reset".');
+  }
+}
+
+document.addEventListener("mousedown", function (event) {
+  const target = event.target;
+  if (myDialog2.style.display === "block" && !myDialog2.contains(target)) {
+    myDialog2.style.display = "none";
+  }
+});
+
+
+// add button to store results locally
+// Get a reference to the button element
+const storeButton = document.getElementById('store-button');
+storeButton.style.display = 'none';
+
+// Attach a click event listener to the button
+storeButton.addEventListener('click', function() {
+  // Retrieve data from sessionStorage
+  const hitsData = JSON.parse(sessionStorage.getItem('hits'));
+  const resultsHtml = sessionStorage.getItem('results');
 
   // Check if there are no results available
   if (!resultsHtml) {
@@ -470,42 +602,50 @@ downloadJsonButton.addEventListener('click', function() {
     csvRows.push(csvRow);
   }
 
-  // Add "hits" data to the corresponding CSV rows
+  // Add "hits" data to the corresponding rows
   if (hitsData && hitsData.length > 0) {
-    let rowIndex = 0; // Track the current row index
-    for (let i = 0; i < hitsData.length; i++) {
+    const maxRows = Math.min(csvRows.length, hitsData.length); // Determine the maximum number of rows to consider
+    for (let i = 0; i < maxRows; i++) {
       const hits = hitsData[i] || ''; // Check if hits data exists or set it as an empty string
       const hitsArray = Array.isArray(hits) ? hits : [hits]; // Convert hits to an array if it's not already
       for (let j = 0; j < hitsArray.length; j++) {
         const hitsValue = hitsArray[j];
-        const csvRow = csvRows[rowIndex] ? csvRows[rowIndex].split(',') : []; // Split the existing CSV row into an array
+        const csvRow = csvRows[i].split(','); // Get the corresponding CSV row
         csvRow.push(hitsValue);
-        csvRows[rowIndex] = csvRow.join(',');
-        rowIndex++; // Move to the next row index
+        csvRows[i] = csvRow.join(',');
       }
-    }
-  } else {
-    // Add empty string to the CSV rows when hitsData is null or empty
-    for (let i = 0; i < csvRows.length; i++) {
-      csvRows[i] += ",";
     }
   }
 
-  // Convert the array of CSV rows to a string
-  const csvData = csvRows.join('\n');
+  // Copy the data from sessionStorage to localStorage and add the "gameID" and "timestamp" columns
+  let localStorageData = JSON.parse(localStorage.getItem('csvData'));
+  if (!localStorageData) {
+    localStorageData = []; // Initialize as an empty array if localStorageData is null
+  }
+  let gameID;
+  if (localStorageData.length > 0) {
+    gameID = parseInt(localStorageData[localStorageData.length - 1][0]) + 1; // Increment the previous gameID by 1
+  } else {
+    gameID = 1; // Set the initial gameID as 1
+  }
 
-  // Create a link element
-  const link = document.createElement('a');
-  link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvData));
-  link.setAttribute('download', 'crokinele_results.csv');
-  link.style.display = 'none';
+  const timestamp = new Date().toISOString(); // Get the current timestamp in ISO format
 
-  // Add the link to the DOM
-  document.body.appendChild(link);
+  // Add "gameID", "timestamp", and hits to each row
+  for (let i = 0; i < csvRows.length; i++) {
+    const csvRow = csvRows[i].split(',');
+    csvRow.unshift(timestamp); // Add the timestamp as the first column
+    csvRow.unshift(gameID.toString()); // Add the gameID as the second column
+    localStorageData.push(csvRow);
+  }
 
-  // Simulate a click on the link to download the file
-  link.click();
+  // Save the updated data to localStorage
+  localStorage.setItem('csvData', JSON.stringify(localStorageData));
 
-  // Remove the link from the DOM
-  document.body.removeChild(link);
+  // Display success message
+  //alert('Results stored locally.');
+
+  // Optional: Update any UI elements or perform additional actions
+
 });
+

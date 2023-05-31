@@ -3,10 +3,23 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <link rel="shortcut icon" type="image/x-icon" href="crokinole2.png">
+    <link rel="shortcut icon" type="image/x-icon" href="crokinole2.png">    
   </head>
   <body>
-    <div id="particles-js"></div>
+    <dialog id="myDialog">
+      <p>Do you want to save or reset?</p>
+      <button id="option1">Save and Reset</button>
+      <button id="option2">Reset</button>
+      <button id="option3">Cancel</button>
+    </dialog>
+
+    <dialog id="myDialog2">
+      <p>Do you want to download or reset?</p>
+      <button id="option4">Download</button>
+      <button id="option5">Reset</button>
+      <button id="option6">Cancel</button>
+    </dialog>
+    <!--<div id="particles-js"></div>-->
     <div id="button-container">
       <select id="playerCount">
         <option value="0">Select</option>
@@ -15,7 +28,7 @@
         <option value="3">3</option>
         <option value="4">4</option>
       </select>
-      <button id="reset-button">Reset <br> Score</button>
+      <button id="reset-button">New <br> Game</button>
       <!-- <button id="add-player-button">Add player(s)</button> -->
       <br>
       <!--<button id="calculate-results-button">Add <br> scores</button> -->
@@ -49,7 +62,8 @@
     </table>
     <br>
     <br>
-    <button id="download-json-button">Export<br>CSV</button>
+    <button id="store-button">Save<br>Game</button>
+    <button id="download-json-button">Export<br>CSV: <span id="game-id"></span></button>
     <button id="penalty-button">Penalty<br>shoot-out</button>
     <script src="index.js"></script>
     <script>
