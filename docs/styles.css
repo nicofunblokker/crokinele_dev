@@ -218,3 +218,10 @@ dialog button {
   display: block;
   margin: 10px auto;
 }
+
+  /* Dialog styles */
+  #playerDialog {
+    background-color: #fff; /* Set the desired background color for the dialog */
+    opacity: 1; /* Set the desired opacity for the dialog */
+    z-index: 1000; /* Adjust the z-index to appear above the overlay */
+  }

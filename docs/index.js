@@ -29,14 +29,55 @@ function updateGameIDLabel() {
   document.getElementById('game-id').textContent = highestGameID.toString();
 }
 
-function addPlayer() {
-  var playerCount = document.getElementById("playerCount").value;
 
-  while (playerInputsDiv.childNodes.length > 0) {
-    playerInputsDiv.removeChild(playerInputsDiv.childNodes[0]);
+var startButton = document.getElementById("start");
+startButton.style.display = 'none';
+var playerDialog = document.getElementById("playerDialog");
+
+var playerButtons = document.getElementsByClassName("player-button");
+
+startButton.addEventListener("click", function () {
+  playerDialog.style.display = "block";
+});
+
+window.addEventListener("load", function () {
+  if (sessionStorage.getItem("playerInputsDiv") === null) {
+    startButton.click();
+  }
+});
+
+
+
+
+
+for (var i = 0; i < playerButtons.length; i++) {
+  playerButtons[i].addEventListener("click", function () {
+    var playerCount = this.value;
+    addPlayer(playerCount);
+    playerDialog.style.display = "none";
+  });
+}
+
+function addPlayer(playerCount) {
+  var playerNames = [];
+
+  for (var i = 0; i < playerCount; i++) {
+    var playerName = prompt("Enter the name for Player " + (i + 1));
+    if (playerName !== null && playerName.trim() !== "") {
+      playerNames.push(playerName);
+    }
   }
 
-  var playerNames = ["blue", "red", "white", "black"];
+  if (playerNames.length === 0) {
+    playerNames = ["blue", "red", "white", "black"];
+  }
+
+  //var playerInputsDiv = document.getElementById("playerInputsDiv");
+
+  while (playerInputsDiv.firstChild) {
+    playerInputsDiv.removeChild(playerInputsDiv.firstChild);
+  }
+
   for (var i = 0; i < playerCount; i++) {
     var playerRow = document.createElement("div");
     playerRow.style.display = "flex";
@@ -53,13 +94,7 @@ function addPlayer() {
     playerInput.classList.add("player-input");
     playerInput.style.marginRight = "10px";
     playerInput.value = playerNames[i] || "";
-    playerInput.addEventListener("focus", (function(index) {
-      return function() {
-        if (this.value === playerNames[index]) {
-          this.value = "";
-        }
-      };
-    })(i));
+    playerInput.disabled = true; // Disable the input field
     playerRow.appendChild(playerInput);
 
     var scoreLabel = document.createElement("label");
@@ -76,6 +111,8 @@ function addPlayer() {
   }
   sessionStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
 }
+
+
 
 // Add event listener to the playerInputsDiv for keydown events on descendant input fields
 var cooldownActive = false; // Flag to track cooldown state
@@ -301,7 +338,6 @@ calculateTotalButton.addEventListener("click", function () {
 function reset() {
     sessionStorage.clear();
     location.reload();
-    playerCount.value = "0";
     //sessionStorage.setItem("round", 0);
 }
 
@@ -464,10 +500,10 @@ resetButton.addEventListener("click", function () {
 });
 
 option1Button.onclick = () => {
-  storeButton.click();
-  reset();
+  storeButton.click(); 
+   reset();
   myDialog.style.display = "none";
-};
+};  
 
 option2Button.onclick = () => {
   reset();
@@ -648,4 +684,3 @@ storeButton.addEventListener('click', function() {
   // Optional: Update any UI elements or perform additional actions
 
 });
-
