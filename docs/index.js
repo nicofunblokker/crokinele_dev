@@ -598,7 +598,7 @@ storeButton.addEventListener('click', function() {
   localStorage.setItem('csvData', JSON.stringify(localStorageData));
 
   // Display success message
-  alert('Results stored locally.');
+  //alert('Results stored locally.');
 
   // Optional: Update any UI elements or perform additional actions
 
