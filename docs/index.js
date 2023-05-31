@@ -478,7 +478,12 @@ option3Button.onclick = () => {
   myDialog.style.display = "none";
 };
 
-
+document.addEventListener("mousedown", function (event) {
+  const target = event.target;
+  if (myDialog.style.display === "block" && !myDialog.contains(target)) {
+    myDialog.style.display = "none";
+  }
+});
 
 
 // Add button to download stored results as CSV
@@ -555,6 +560,13 @@ function handleAction(action) {
     alert('Invalid action. Please choose either "download" or "reset".');
   }
 }
+
+document.addEventListener("mousedown", function (event) {
+  const target = event.target;
+  if (myDialog2.style.display === "block" && !myDialog2.contains(target)) {
+    myDialog2.style.display = "none";
+  }
+});
 
 
 // add button to store results locally
