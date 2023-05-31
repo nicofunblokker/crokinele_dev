@@ -454,19 +454,29 @@ columns.forEach((column, index) => {
 
 var resetButton = document.getElementById("reset-button");
 
+const myDialog = document.getElementById("myDialog");
+const option1Button = document.getElementById("option1");
+const option2Button = document.getElementById("option2");
+const option3Button = document.getElementById("option3");
+
 resetButton.addEventListener("click", function () {
-  const action = prompt("Save results before starting new game (1) or reset (2)?");
-  if (action === '1') {
-      storeButton.click(); // Simulate a click on the "storeButton" to save the game
-      reset();
-  } else if (action === '2') {
-      reset();
-  } else {
-      // User clicked cancel or entered an invalid option
-      // No action needed
-  }
+  myDialog.style.display = "block";
 });
 
+option1Button.onclick = () => {
+  storeButton.click();
+  reset();
+  myDialog.style.display = "none";
+};
+
+option2Button.onclick = () => {
+  reset();
+  myDialog.style.display = "none";
+};
+
+option3Button.onclick = () => {
+  myDialog.style.display = "none";
+};
 
 
 
@@ -476,8 +486,31 @@ const downloadJsonButton = document.getElementById('download-json-button');
 
 // Attach a click event listener to the download button
 downloadJsonButton.addEventListener('click', function() {
-  const action = prompt("Do you want to download (1) or reset (2)?");
-  
+  const myDialog2 = document.getElementById("myDialog2");
+  const option4Button = document.getElementById("option4");
+  const option5Button = document.getElementById("option5");
+  const option6Button = document.getElementById("option6");
+
+  myDialog2.style.display = "block"; // Display the dialogue box
+
+  option4Button.onclick = () => {
+    const action = '1';
+    handleAction(action);
+    myDialog2.style.display = "none"; // Hide the dialogue box
+  };
+
+  option5Button.onclick = () => {
+    const action = '2';
+    handleAction(action);
+    myDialog2.style.display = "none"; // Hide the dialogue box
+  };
+
+  option6Button.onclick = () => {
+    myDialog2.style.display = "none"; // Hide the dialogue box
+  };
+});
+
+function handleAction(action) {
   if (action === '1') {
     // Retrieve data from localStorage
     const localStorageData = JSON.parse(localStorage.getItem('csvData'));
@@ -515,13 +548,13 @@ downloadJsonButton.addEventListener('click', function() {
     if (resetConfirmation) {
       // Reset localStorage
       localStorage.clear();
-      updateGameIDLabel()
+      updateGameIDLabel();
       alert('localStorage has been reset.');
     }
   } else {
     alert('Invalid action. Please choose either "download" or "reset".');
   }
-});
+}
 
 
 // add button to store results locally

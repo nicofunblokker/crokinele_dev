@@ -209,3 +209,12 @@ th.schwarz {
 .hidden {
   display: none;
 }
+
+dialog {
+  display: none;
+}
+
+dialog button {
+  display: block;
+  margin: 10px auto;
+}
