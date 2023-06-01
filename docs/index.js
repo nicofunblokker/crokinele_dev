@@ -516,6 +516,12 @@ document.addEventListener("mousedown", function (event) {
   }
 });
 
+document.addEventListener("mousedown", function (event) {
+  const target = event.target;
+  if (playerDialog.style.display === "block" && !playerDialog.contains(target)) {
+    playerDialog.style.display = "none";
+  }
+});
 
 // Add button to download stored results as CSV
 const downloadJsonButton = document.getElementById('download-json-button');
