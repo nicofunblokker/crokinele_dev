@@ -7,6 +7,12 @@ var resultsTable = document.getElementById("results");
 var players = [];
 var round = 0;
 
+// Get the table element and its header row
+const table = document.getElementById("hits");
+const headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
+
+
+
 function updateGameIDLabel() {
   // Retrieve the csvData from local storage
   var csvData = JSON.parse(localStorage.getItem('csvData'));
@@ -27,6 +33,21 @@ function updateGameIDLabel() {
 
   // Set the highest gameID as the label for the button
   document.getElementById('game-id').textContent = highestGameID.toString();
+}
+
+// Function to update the table based on the current player count
+function updateTable(playerCount) {
+  playerCount = sessionStorage.getItem("playerCount");
+  const columns = headerRow.children;
+  
+  // Hide or show the columns based on the current player count
+  for (let i = 0; i < columns.length; i++) {
+    if (i < playerCount) {
+      columns[i].classList.remove("hidden");
+    } else {
+      columns[i].classList.add("hidden");
+    }
+  }
 }
 
 
@@ -50,10 +71,13 @@ window.addEventListener("load", function () {
 for (var i = 0; i < playerButtons.length; i++) {
   playerButtons[i].addEventListener("click", function () {
     var playerCount = this.value;
+    sessionStorage.setItem("playerCount", playerCount);
     addPlayer(playerCount);
     playerDialog.style.display = "none";
+    updateTable(playerCount)
   });
 }
+
 
 function addPlayer(playerCount) {
   var playerNames = [];
@@ -242,7 +266,6 @@ window.onload = function() {
 var storedPlayerCount = sessionStorage.getItem("playerCount");
 if (storedPlayerCount) {
   const playerCount = parseInt(storedPlayerCount);
-  playerCountInput.value = playerCount;
   updateTable(playerCount);
 }
 };
@@ -347,35 +370,6 @@ function reset() {
     location.reload();
     //sessionStorage.setItem("round", 0);
 }
-
-// Get the table element and its header row
-const table = document.getElementById("hits");
-const headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
-
-// Function to update the table based on the current player count
-function updateTable(playerCount) {
-
-  sessionStorage.setItem("playerCount", playerCount);
-  const columns = headerRow.children;
-  
-  // Hide or show the columns based on the current player count
-  for (let i = 0; i < columns.length; i++) {
-    if (i < playerCount) {
-      columns[i].classList.remove("hidden");
-    } else {
-      columns[i].classList.add("hidden");
-    }
-  }
-}
-
-
-
-// Add an event listener to update the table when the playerCount changes
-const playerCountInput = document.getElementById("playerCount"); // Assuming there's an input element with ID "playerCount"
-playerCount.addEventListener("change", function () {
-  const playerCount = parseInt(playerCountInput.value);
-  updateTable(playerCount);
-});
 
 
 
