@@ -10,7 +10,7 @@ const summary = {};
 // Iterate over each row in the parsed data
 for (const row of parsedData) {
   const player = row[3];
-  const score = parseFloat(row[5]);
+  const score = parseFloat(row[5]); // Corrected index to 5
 
   // Check if the player already exists in the summary object
   if (summary.hasOwnProperty(player)) {
