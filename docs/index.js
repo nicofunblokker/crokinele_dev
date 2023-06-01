@@ -133,18 +133,18 @@ playerInputsDiv.addEventListener("keydown", function(event) {
   }
 });
 
-
 function calculateResults() {
   var scores = [];
   var playerInputs = document.querySelectorAll(".player-input");
+  var playerNames = [];
 
-  for (var i = 0; i < playerInputs.length; i += 1) {
-    var playerNames = ["blue", "red", "white", "black"];
-    if (playerInputs[i].value === "") {
-      playerInputs[i].value = playerNames[i / 2 % playerNames.length];
-    }
-  }
+  // Reconstruct player names from DOM elements
+  var playerLabels = document.querySelectorAll(".player-name");
+  playerLabels.forEach(function(label) {
+    playerNames.push(label.textContent);
+  });
 
+  // Remove existing "Total" rows from the table
   for (var i = resultsTable.rows.length - 1; i >= 0; i--) {
     var row = resultsTable.rows[i];
     if (row.cells[0].innerHTML === "Total") {
@@ -152,7 +152,8 @@ function calculateResults() {
     }
   }
 
-  for (var i = 1; i < playerInputs.length; i += 2) {
+  // Iterate over playerInputs array
+  for (var i = 0; i < playerInputs.length; i++) {
     if (playerInputs[i].value === "") {
       alert("Score cannot be empty. Please enter a valid score.");
       return;
@@ -179,28 +180,25 @@ function calculateResults() {
     }
   }
 
-
-
-
-
-
-  
+  // Add rows to the results table
   var maxScore = Math.max(...scores);
-  for (var i = 0; i < playerInputs.length; i += 2) {
+  for (var i = 0; i < playerInputs.length; i++) {
     var row = results.insertRow();
     var roundCell = row.insertCell(0);
     var playerCell = row.insertCell(1);
     var scoreCell = row.insertCell(2);
     roundCell.innerHTML = round;
-    playerCell.innerHTML = playerInputs[i].value;
-    scoreCell.innerHTML = playerInputs[i + 1].value;
-    if (playerInputs[i + 1].value == maxScore) {
+    playerCell.innerHTML = playerNames[i];
+    scoreCell.innerHTML = playerInputs[i].value;
+    if (playerInputs[i].value == maxScore) {
       row.classList.add("winner");
     }
   }
+
+  // Store updated results in sessionStorage
   sessionStorage.setItem("results", results.innerHTML);
- //sessionStorage.setItem("round", round);
 }
+
 
 
 playerCount.addEventListener("change", function () {
