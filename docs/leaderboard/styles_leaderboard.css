@@ -1,0 +1,84 @@
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+th, td {
+    padding: 0.25em;
+    text-align: left;
+    vertical-align: middle;
+    border: 2px solid #ebe2db;
+    font-weight: bold;
+    color: black;
+}
+
+input[type="number"], select, button {
+    font-size: 1em;
+    font-weight: bold;
+    padding: 0.5em;
+    background-color: #8B5E3C;
+    color: white;
+    border: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: #720505;
+}
+
+label {
+    display: inline-block;
+    margin-right: 1em;
+    font-weight: bold;
+}
+
+body {
+    background-image: url('../crokinole.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+}
+
+#fraction {
+    margin-top: 1em;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    background-color: #8B5E3C;
+}
+
+input[type="checkbox"] {
+    width: 25px;
+    height: 25px;
+    background-color: #8B5E3C;
+}
+
+th {
+    background-color: #8B5E3C;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+#numRounds, #numPlayers {
+    border: 1px solid white;
+}
