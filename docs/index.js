@@ -65,15 +65,19 @@ function addPlayer(playerCount) {
     }
   }
 
-  if (playerNames.length === 0) {
-    playerNames = ["blue", "red", "white", "black"];
+  // Assign default names only to empty names
+  if (playerNames.length < playerCount) {
+    var defaultNames = ["blue", "red", "white", "black"];
+    for (var i = playerNames.length; i < playerCount; i++) {
+      playerNames.push(defaultNames[i]);
+    }
   }
 
-  //var playerInputsDiv = document.getElementById("playerInputsDiv");
-
+  // Rest of the code remains the same...
   while (playerInputsDiv.firstChild) {
     playerInputsDiv.removeChild(playerInputsDiv.firstChild);
   }
+
 
   for (var i = 0; i < playerCount; i++) {
     var playerRow = document.createElement("div");
