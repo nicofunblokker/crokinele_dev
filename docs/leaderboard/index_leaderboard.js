@@ -10,7 +10,7 @@ const summary = {};
 // Iterate over each row in the parsed data
 for (const row of parsedData) {
   const player = row[3];
-  const score = parseFloat(row[5]); // Corrected index to 5
+  const score = parseFloat(row[4]); // Corrected index to 5
 
   // Check if the player already exists in the summary object
   if (summary.hasOwnProperty(player)) {
@@ -40,6 +40,9 @@ for (const player in summary) {
     summaryTable.push(row);
   }
 }
+
+// Sort the summary table by mean (descending order)
+summaryTable.sort((a, b) => b[2] - a[2]);
 
 // Generate HTML table
 const table = document.createElement("table");
