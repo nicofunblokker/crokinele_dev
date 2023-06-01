@@ -86,8 +86,11 @@ function addPlayer(playerCount) {
     playerRow.style.marginBottom = "10px";
   
     var playerNumber = document.createElement("div");
-    playerNumber.textContent = "P" + (i + 1);
+    playerNumber.style.width = "20px";
+    playerNumber.style.height = "20px";
+    playerNumber.style.borderRadius = "50%";
     playerNumber.style.marginRight = "10px";
+    playerNumber.style.backgroundColor = getPlayerColor(i);
     playerRow.appendChild(playerNumber);
   
     var playerLabel = document.createElement("div");
@@ -107,6 +110,12 @@ function addPlayer(playerCount) {
   
     playerInputsDiv.appendChild(playerRow);
   }
+  
+  function getPlayerColor(index) {
+    var colors = ["blue", "red", "grey", "black"];
+    return colors[index % colors.length];
+  }
+  
   sessionStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
 }
 
