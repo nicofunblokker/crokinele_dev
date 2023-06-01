@@ -78,7 +78,6 @@ function addPlayer(playerCount) {
     playerInputsDiv.removeChild(playerInputsDiv.firstChild);
   }
 
-
   for (var i = 0; i < playerCount; i++) {
     var playerRow = document.createElement("div");
     playerRow.style.display = "flex";
@@ -112,10 +111,9 @@ function addPlayer(playerCount) {
   }
   
   function getPlayerColor(index) {
-    var colors = ["blue", "red", "grey", "black"];
+    var colors = ["blue", "red", "white", "black"];
     return colors[index % colors.length];
   }
-  
   sessionStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
 }
 
