@@ -84,22 +84,27 @@ function addPlayer(playerCount) {
     playerRow.style.display = "flex";
     playerRow.style.alignItems = "center";
     playerRow.style.marginBottom = "10px";
-
+  
+    var playerNumber = document.createElement("div");
+    playerNumber.textContent = "P" + (i + 1);
+    playerNumber.style.marginRight = "10px";
+    playerRow.appendChild(playerNumber);
+  
     var playerLabel = document.createElement("div");
     playerLabel.className = "player-name";
     playerLabel.textContent = playerNames[i] || "Player " + (i + 1);
     playerRow.appendChild(playerLabel);
-
+  
     var scoreLabel = document.createElement("label");
     scoreLabel.innerHTML = "Score";
     scoreLabel.style.marginRight = "10px";
     playerRow.appendChild(scoreLabel);
-
+  
     var scoreInput = document.createElement("input");
     scoreInput.type = "number";
     scoreInput.classList.add("player-input");
     playerRow.appendChild(scoreInput);
-
+  
     playerInputsDiv.appendChild(playerRow);
   }
   sessionStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
