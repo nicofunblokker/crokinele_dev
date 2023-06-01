@@ -62,7 +62,7 @@ startButton.addEventListener("click", function () {
 });
 
 window.addEventListener("load", function () {
-  if (sessionStorage.getItem("playerInputsDiv") === null) {
+  if (sessionStorage.getItem("playerCount") === null) {
     startButton.click();
   }
 });
