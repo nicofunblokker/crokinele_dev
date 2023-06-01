@@ -47,9 +47,6 @@ window.addEventListener("load", function () {
 });
 
 
-
-
-
 for (var i = 0; i < playerButtons.length; i++) {
   playerButtons[i].addEventListener("click", function () {
     var playerCount = this.value;
@@ -84,18 +81,10 @@ function addPlayer(playerCount) {
     playerRow.style.alignItems = "center";
     playerRow.style.marginBottom = "10px";
 
-    var playerLabel = document.createElement("label");
-    playerLabel.innerHTML = "P" + (i + 1);
-    playerLabel.style.marginRight = "10px";
+    var playerLabel = document.createElement("div");
+    playerLabel.className = "player-name";
+    playerLabel.textContent = playerNames[i] || "Player " + (i + 1);
     playerRow.appendChild(playerLabel);
-
-    var playerInput = document.createElement("input");
-    playerInput.type = "text";
-    playerInput.classList.add("player-input");
-    playerInput.style.marginRight = "10px";
-    playerInput.value = playerNames[i] || "";
-    playerInput.disabled = true; // Disable the input field
-    playerRow.appendChild(playerInput);
 
     var scoreLabel = document.createElement("label");
     scoreLabel.innerHTML = "Score";
@@ -111,6 +100,10 @@ function addPlayer(playerCount) {
   }
   sessionStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
 }
+
+
+
+
 
 
 
@@ -145,7 +138,7 @@ function calculateResults() {
   var scores = [];
   var playerInputs = document.querySelectorAll(".player-input");
 
-  for (var i = 0; i < playerInputs.length; i += 2) {
+  for (var i = 0; i < playerInputs.length; i += 1) {
     var playerNames = ["blue", "red", "white", "black"];
     if (playerInputs[i].value === "") {
       playerInputs[i].value = playerNames[i / 2 % playerNames.length];
