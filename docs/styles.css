@@ -5,6 +5,15 @@ input[type="text"], input[type="number"] {
   margin: 1px;
 }
 
+.player-name {
+  display: inline-block;
+  background-color: #F5DEB3;
+  border: 1px solid #8B5E3C;
+  padding: 5px;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
 select {
   background-color: #F5DEB3;
   border: 1px solid #8B5E3C;
@@ -116,8 +125,19 @@ body {
   max-width: 15em; /* maximum width of input box */
 }
 
+.player-name {
+  width: 100%;
+  max-width: 15em; /* maximum width of input box */
+}
+
 @media (max-width: 768px) {
   .player-input {
+    max-width: 10em; /* reduce maximum width on smaller screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .player-name {
     max-width: 10em; /* reduce maximum width on smaller screens */
   }
 }
@@ -218,3 +238,10 @@ dialog button {
   display: block;
   margin: 10px auto;
 }
+
+  /* Dialog styles */
+  #playerDialog {
+    background-color: #fff; /* Set the desired background color for the dialog */
+    opacity: 1; /* Set the desired opacity for the dialog */
+    z-index: 1000; /* Adjust the z-index to appear above the overlay */
+  }

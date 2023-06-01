@@ -7,6 +7,12 @@ var resultsTable = document.getElementById("results");
 var players = [];
 var round = 0;
 
+// Get the table element and its header row
+const table = document.getElementById("hits");
+const headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
+
+
+
 function updateGameIDLabel() {
   // Retrieve the csvData from local storage
   var csvData = JSON.parse(localStorage.getItem('csvData'));
@@ -29,53 +35,120 @@ function updateGameIDLabel() {
   document.getElementById('game-id').textContent = highestGameID.toString();
 }
 
-function addPlayer() {
-  var playerCount = document.getElementById("playerCount").value;
+// Function to update the table based on the current player count
+function updateTable(playerCount) {
+  playerCount = sessionStorage.getItem("playerCount");
+  const columns = headerRow.children;
+  
+  // Hide or show the columns based on the current player count
+  for (let i = 0; i < columns.length; i++) {
+    if (i < playerCount) {
+      columns[i].classList.remove("hidden");
+    } else {
+      columns[i].classList.add("hidden");
+    }
+  }
+}
 
-  while (playerInputsDiv.childNodes.length > 0) {
-    playerInputsDiv.removeChild(playerInputsDiv.childNodes[0]);
+
+var startButton = document.getElementById("start");
+startButton.style.display = 'none';
+var playerDialog = document.getElementById("playerDialog");
+
+var playerButtons = document.getElementsByClassName("player-button");
+
+startButton.addEventListener("click", function () {
+  playerDialog.style.display = "block";
+});
+
+window.addEventListener("load", function () {
+  if (sessionStorage.getItem("playerInputsDiv") === null) {
+    startButton.click();
+  }
+});
+
+if (sessionStorage.getItem("playerInputsDiv") === null && sessionStorage.getItem("hits") !== null) {
+  sessionStorage.removeItem("hits");
+}
+
+for (var i = 0; i < playerButtons.length; i++) {
+  playerButtons[i].addEventListener("click", function () {
+    var playerCount = this.value;
+    sessionStorage.setItem("playerCount", playerCount);
+    addPlayer(playerCount);
+    playerDialog.style.display = "none";
+    updateTable(playerCount)
+  });
+}
+
+
+function addPlayer(playerCount) {
+  var playerNames = [];
+
+  for (var i = 0; i < playerCount; i++) {
+    var playerName = prompt("Enter the name for Player " + (i + 1));
+    if (playerName !== null && playerName.trim() !== "") {
+      playerNames.push(playerName);
+    }
   }
 
-  var playerNames = ["blue", "red", "white", "black"];
+  // Assign default names only to empty names
+  if (playerNames.length < playerCount) {
+    var defaultNames = ["blue", "red", "white", "black"];
+    for (var i = playerNames.length; i < playerCount; i++) {
+      playerNames.push(defaultNames[i]);
+    }
+  }
+
+  // Rest of the code remains the same...
+  while (playerInputsDiv.firstChild) {
+    playerInputsDiv.removeChild(playerInputsDiv.firstChild);
+  }
+
   for (var i = 0; i < playerCount; i++) {
     var playerRow = document.createElement("div");
     playerRow.style.display = "flex";
     playerRow.style.alignItems = "center";
     playerRow.style.marginBottom = "10px";
-
-    var playerLabel = document.createElement("label");
-    playerLabel.innerHTML = "P" + (i + 1);
-    playerLabel.style.marginRight = "10px";
+  
+    var playerNumber = document.createElement("div");
+    playerNumber.style.width = "20px";
+    playerNumber.style.height = "20px";
+    playerNumber.style.borderRadius = "50%";
+    playerNumber.style.marginRight = "10px";
+    playerNumber.style.backgroundColor = getPlayerColor(i);
+    playerRow.appendChild(playerNumber);
+  
+    var playerLabel = document.createElement("div");
+    playerLabel.className = "player-name";
+    playerLabel.textContent = playerNames[i] || "Player " + (i + 1);
     playerRow.appendChild(playerLabel);
-
-    var playerInput = document.createElement("input");
-    playerInput.type = "text";
-    playerInput.classList.add("player-input");
-    playerInput.style.marginRight = "10px";
-    playerInput.value = playerNames[i] || "";
-    playerInput.addEventListener("focus", (function(index) {
-      return function() {
-        if (this.value === playerNames[index]) {
-          this.value = "";
-        }
-      };
-    })(i));
-    playerRow.appendChild(playerInput);
-
+  
     var scoreLabel = document.createElement("label");
     scoreLabel.innerHTML = "Score";
     scoreLabel.style.marginRight = "10px";
     playerRow.appendChild(scoreLabel);
-
+  
     var scoreInput = document.createElement("input");
     scoreInput.type = "number";
     scoreInput.classList.add("player-input");
     playerRow.appendChild(scoreInput);
-
+  
     playerInputsDiv.appendChild(playerRow);
+  }
+  
+  function getPlayerColor(index) {
+    var colors = ["blue", "red", "white", "black"];
+    return colors[index % colors.length];
   }
   sessionStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
 }
+
+
+
+
+
+
 
 // Add event listener to the playerInputsDiv for keydown events on descendant input fields
 var cooldownActive = false; // Flag to track cooldown state
@@ -103,18 +176,18 @@ playerInputsDiv.addEventListener("keydown", function(event) {
   }
 });
 
-
 function calculateResults() {
   var scores = [];
   var playerInputs = document.querySelectorAll(".player-input");
+  var playerNames = [];
 
-  for (var i = 0; i < playerInputs.length; i += 2) {
-    var playerNames = ["blue", "red", "white", "black"];
-    if (playerInputs[i].value === "") {
-      playerInputs[i].value = playerNames[i / 2 % playerNames.length];
-    }
-  }
+  // Reconstruct player names from DOM elements
+  var playerLabels = document.querySelectorAll(".player-name");
+  playerLabels.forEach(function(label) {
+    playerNames.push(label.textContent);
+  });
 
+  // Remove existing "Total" rows from the table
   for (var i = resultsTable.rows.length - 1; i >= 0; i--) {
     var row = resultsTable.rows[i];
     if (row.cells[0].innerHTML === "Total") {
@@ -122,7 +195,8 @@ function calculateResults() {
     }
   }
 
-  for (var i = 1; i < playerInputs.length; i += 2) {
+  // Iterate over playerInputs array
+  for (var i = 0; i < playerInputs.length; i++) {
     if (playerInputs[i].value === "") {
       alert("Score cannot be empty. Please enter a valid score.");
       return;
@@ -149,28 +223,25 @@ function calculateResults() {
     }
   }
 
-
-
-
-
-
-  
+  // Add rows to the results table
   var maxScore = Math.max(...scores);
-  for (var i = 0; i < playerInputs.length; i += 2) {
+  for (var i = 0; i < playerInputs.length; i++) {
     var row = results.insertRow();
     var roundCell = row.insertCell(0);
     var playerCell = row.insertCell(1);
     var scoreCell = row.insertCell(2);
     roundCell.innerHTML = round;
-    playerCell.innerHTML = playerInputs[i].value;
-    scoreCell.innerHTML = playerInputs[i + 1].value;
-    if (playerInputs[i + 1].value == maxScore) {
+    playerCell.innerHTML = playerNames[i];
+    scoreCell.innerHTML = playerInputs[i].value;
+    if (playerInputs[i].value == maxScore) {
       row.classList.add("winner");
     }
   }
+
+  // Store updated results in sessionStorage
   sessionStorage.setItem("results", results.innerHTML);
- //sessionStorage.setItem("round", round);
 }
+
 
 
 playerCount.addEventListener("change", function () {
@@ -198,7 +269,6 @@ window.onload = function() {
 var storedPlayerCount = sessionStorage.getItem("playerCount");
 if (storedPlayerCount) {
   const playerCount = parseInt(storedPlayerCount);
-  playerCountInput.value = playerCount;
   updateTable(playerCount);
 }
 };
@@ -301,38 +371,8 @@ calculateTotalButton.addEventListener("click", function () {
 function reset() {
     sessionStorage.clear();
     location.reload();
-    playerCount.value = "0";
     //sessionStorage.setItem("round", 0);
 }
-
-// Get the table element and its header row
-const table = document.getElementById("hits");
-const headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
-
-// Function to update the table based on the current player count
-function updateTable(playerCount) {
-
-  sessionStorage.setItem("playerCount", playerCount);
-  const columns = headerRow.children;
-  
-  // Hide or show the columns based on the current player count
-  for (let i = 0; i < columns.length; i++) {
-    if (i < playerCount) {
-      columns[i].classList.remove("hidden");
-    } else {
-      columns[i].classList.add("hidden");
-    }
-  }
-}
-
-
-
-// Add an event listener to update the table when the playerCount changes
-const playerCountInput = document.getElementById("playerCount"); // Assuming there's an input element with ID "playerCount"
-playerCount.addEventListener("change", function () {
-  const playerCount = parseInt(playerCountInput.value);
-  updateTable(playerCount);
-});
 
 
 
@@ -464,10 +504,10 @@ resetButton.addEventListener("click", function () {
 });
 
 option1Button.onclick = () => {
-  storeButton.click();
-  reset();
+  storeButton.click(); 
+   reset();
   myDialog.style.display = "none";
-};
+};  
 
 option2Button.onclick = () => {
   reset();
@@ -485,6 +525,12 @@ document.addEventListener("mousedown", function (event) {
   }
 });
 
+document.addEventListener("mousedown", function (event) {
+  const target = event.target;
+  if (playerDialog.style.display === "block" && !playerDialog.contains(target)) {
+    playerDialog.style.display = "none";
+  }
+});
 
 // Add button to download stored results as CSV
 const downloadJsonButton = document.getElementById('download-json-button');
@@ -648,4 +694,3 @@ storeButton.addEventListener('click', function() {
   // Optional: Update any UI elements or perform additional actions
 
 });
-
