@@ -62,11 +62,14 @@ startButton.addEventListener("click", function () {
 });
 
 window.addEventListener("load", function () {
-  if (sessionStorage.getItem("playerCount") === null) {
+  if (sessionStorage.getItem("playerInputsDiv") === null) {
     startButton.click();
   }
 });
 
+if (sessionStorage.getItem("playerInputsDiv") === null && sessionStorage.getItem("hits") !== null) {
+  sessionStorage.removeItem("hits");
+}
 
 for (var i = 0; i < playerButtons.length; i++) {
   playerButtons[i].addEventListener("click", function () {
