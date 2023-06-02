@@ -60,6 +60,17 @@ button {
     width: 120px;
     height: 50px;
   }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 #reset-button {
@@ -245,3 +256,13 @@ dialog button {
     opacity: 1; /* Set the desired opacity for the dialog */
     z-index: 1000; /* Adjust the z-index to appear above the overlay */
   }
+
+
+  
+  
+  
+  
+  
+  
+  
+  
