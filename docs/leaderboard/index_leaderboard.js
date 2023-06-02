@@ -1,8 +1,8 @@
 // Retrieve the CSV data from localStorage
-const csvData = localStorage.getItem("csvData");
+const parsedData = localStorage.getItem("csvData");
 
 // Parse the CSV data into an array of arrays
-const parsedData = csvData ? JSON.parse(csvData) : [];
+//const parsedData = csvData ? JSON.parse(csvData) : [];
 
 // Create an object to store the totals and counts for each player
 const summary = {};
