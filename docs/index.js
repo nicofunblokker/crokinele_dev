@@ -55,6 +55,7 @@ var startButton = document.getElementById("start");
 startButton.style.display = 'none';
 var playerDialog = document.getElementById("playerDialog");
 
+
 var playerButtons = document.getElementsByClassName("player-button");
 
 startButton.addEventListener("click", function () {
