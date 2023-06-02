@@ -55,6 +55,7 @@ var startButton = document.getElementById("start");
 startButton.style.display = 'none';
 var playerDialog = document.getElementById("playerDialog");
 
+
 var playerButtons = document.getElementsByClassName("player-button");
 
 startButton.addEventListener("click", function () {
@@ -375,7 +376,6 @@ function reset() {
 }
 
 
-
 let firstClick = null;
 const columns = document.querySelectorAll('#hits th');
 
@@ -393,6 +393,9 @@ if (storedData) {
 }
 
 columns.forEach((column, index) => {
+  let clickTimeout = null;
+  let isCooldown = false;
+
   column.addEventListener('click', () => {
     if (!firstClick) {
       firstClick = column;
@@ -408,7 +411,7 @@ columns.forEach((column, index) => {
       }
       firstClick.style.backgroundColor = '';
       firstClick = null;
-      
+
       // Update local storage with the new table data
       const hitsData = [];
       for (let i = 0; i < columns.length; i++) {
@@ -423,18 +426,18 @@ columns.forEach((column, index) => {
     event.preventDefault(); // prevent the default context menu from showing up
     if (column.textContent.length > 0) {
       column.textContent = column.textContent.slice(0, -1); // remove the last character
-         // Update local storage with the new table data
-         hitsData = []; // Assign an empty array to reset the hitsData array
-         for (let i = 0; i < columns.length; i++) {
-           const column = columns[i];
-           hitsData.push(column.textContent);
-         }
-         sessionStorage.setItem('hits', JSON.stringify(hitsData));
-       }
+      // Update local storage with the new table data
+      const hitsData = [];
+      for (let i = 0; i < columns.length; i++) {
+        const column = columns[i];
+        hitsData.push(column.textContent);
+      }
+      sessionStorage.setItem('hits', JSON.stringify(hitsData));
+    }
   });
 
   column.addEventListener('touchstart', (event) => {
-    if (event.touches.length === 1) {
+    if (event.touches.length === 1 && !isCooldown) {
       // Single touch, add a letter
       if (!firstClick) {
         firstClick = column;
@@ -458,7 +461,7 @@ columns.forEach((column, index) => {
         }
         firstClick.style.backgroundColor = '';
         firstClick = null;
-  
+
         // Update local storage with the new table data
         const hitsData = [];
         for (let i = 0; i < columns.length; i++) {
@@ -466,21 +469,27 @@ columns.forEach((column, index) => {
           hitsData.push(column.textContent);
         }
         sessionStorage.setItem('hits', JSON.stringify(hitsData));
+
+        // Set cooldown for the clicked column
+        isCooldown = true;
+        setTimeout(() => {
+          isCooldown = false;
+        }, 300);
       }
     }
     event.preventDefault(); // prevent the default touch event
   });
-  
+
   column.addEventListener('touchend', () => {
     clearTimeout(clickTimeout);
-    hitsData = []; // Assign an empty array to reset the hitsData array
+    const hitsData = [];
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i];
       hitsData.push(column.textContent);
     }
     sessionStorage.setItem('hits', JSON.stringify(hitsData));
   });
-  
+
   column.addEventListener('touchmove', (event) => {
     event.preventDefault(); // prevent scrolling while dragging
   });
@@ -491,6 +500,7 @@ columns.forEach((column, index) => {
     event.preventDefault(); // prevent the default touch event
   });
 });
+
 
 var resetButton = document.getElementById("reset-button");
 

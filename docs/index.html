@@ -32,7 +32,11 @@
     </dialog>
 
     </div>
+    <div class="container">
+      <div class="button-container">
+
       <button id="reset-button">New <br> Game</button>
+      <button id="leaderboard-button">Leader-<br>board</button>
       <!-- <button id="add-player-button">Add player(s)</button> -->
       <br>
       <!--<button id="calculate-results-button">Add <br> scores</button> -->
@@ -40,6 +44,7 @@
       <button id="calculate-total-button">Calculate Total</button>
       <button id="delete-round-button">Delete last round</button>
     </div>
+  </div>
     <br>
     <div id="playerInputs"></div>
     <table id="hits">
@@ -53,6 +58,7 @@
         </tr>
       </thead>
     </table>
+    <div class="container">
     <table id="results">
       <thead>
         <tr>
@@ -64,17 +70,27 @@
       <tbody>
       </tbody>
     </table>
+
     <br>
     <br>
+    <div class="button-container"> 
     <button id="store-button">Save<br>Game</button>
     <button id="download-json-button">Export<br>CSV: <span id="game-id"></span></button>
     <button id="penalty-button">Penalty<br>shoot-out</button>
+  </div>
+</div>
     <script src="index.js"></script>
     <script>
       // Add event listener to penalty button
       document.getElementById("penalty-button").addEventListener("click", function() {
         window.open("./penalty/penalty.html", "_blank");
       });
+
+      // Add event listener to leaderboard button
+        document.getElementById("leaderboard-button").addEventListener("click", function() {
+        window.open("./leaderboard/leaderboard.html", "_blank");
+      });
+
     </script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script> -->
   </body>
