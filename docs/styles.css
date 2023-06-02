@@ -111,14 +111,12 @@ th {
   align-items: center;
 }
 
-.player-row {
+/*.player-row {
   display: flex;
   justify-content: space-between;
   width: 50%;
   margin: 10px 0;
-}
-
-
+}*/
 
 body {
   background-image: url('./crokinole.jpg');
@@ -215,7 +213,7 @@ th.blau {
 }
 
 th.rot {
-  background-color: #FF0000;
+  background-color: #ca1f1f;
   color: white;
 }
 
@@ -259,3 +257,10 @@ dialog button {
   }
 
 
+.player-disk {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 10px;
+  flex-shrink: 0;
+}

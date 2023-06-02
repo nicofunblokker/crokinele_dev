@@ -108,11 +108,13 @@ function addPlayer(playerCount) {
 
   for (var i = 0; i < playerCount; i++) {
     var playerRow = document.createElement("div");
+    //playerRow.className = "player-row";
     playerRow.style.display = "flex";
     playerRow.style.alignItems = "center";
     playerRow.style.marginBottom = "10px";
   
     var playerNumber = document.createElement("div");
+    playerNumber.className = "player-disk";
     playerNumber.style.width = "20px";
     playerNumber.style.height = "20px";
     playerNumber.style.borderRadius = "50%";
@@ -139,7 +141,7 @@ function addPlayer(playerCount) {
   }
   
   function getPlayerColor(index) {
-    var colors = ["blue", "red", "white", "black"];
+    var colors = ["#0077C0", "#ca1f1f", "#c5c1c1", "#000000"];
     return colors[index % colors.length];
   }
   sessionStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
@@ -399,7 +401,7 @@ columns.forEach((column, index) => {
   column.addEventListener('click', () => {
     if (!firstClick) {
       firstClick = column;
-      firstClick.style.backgroundColor = 'yellow';
+      firstClick.style.backgroundColor = '#d1c02a';
     } else {
       const secondClick = column;
       const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
@@ -441,7 +443,7 @@ columns.forEach((column, index) => {
       // Single touch, add a letter
       if (!firstClick) {
         firstClick = column;
-        firstClick.style.backgroundColor = 'yellow';
+        firstClick.style.backgroundColor = '#d1c02a';
         clickTimeout = setTimeout(() => {
           // Long tap, remove last letter
           if (firstClick.textContent) {
