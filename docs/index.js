@@ -8,8 +8,8 @@ var players = [];
 var round = 0;
 
 // Get the table element and its header row
-const table = document.getElementById("hits");
-const headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
+const tablehits = document.getElementById("hits");
+const headerRow = tablehits.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
 
 
 
@@ -128,7 +128,7 @@ function addPlayer(playerCount) {
     playerRow.appendChild(playerLabel);
   
     var scoreLabel = document.createElement("label");
-    scoreLabel.innerHTML = "Score";
+    scoreLabel.innerHTML = "#";
     scoreLabel.style.marginRight = "10px";
     playerRow.appendChild(scoreLabel);
   
@@ -160,7 +160,7 @@ var cooldownDuration = 1000; // Cooldown duration in milliseconds
 playerInputsDiv.addEventListener("keydown", function(event) {
   var lastScoreInput = event.target;
   if (lastScoreInput.matches("input[type='number']") && event.key === "Enter") {
-    event.preventDefault(); // Prevent the default form submission behavior
+    if (event.cancelable) event.preventDefault(); // Prevent the default form submission behavior
 
     if (cooldownActive) {
       // If cooldown is active, do nothing
@@ -404,7 +404,7 @@ columns.forEach((column, index) => {
       firstClick.style.backgroundColor = '#d1c02a';
     } else {
       const secondClick = column;
-      const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
+      //const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
       const secondClickFirstLetter = secondClick.classList[0].charAt(0).toUpperCase();
       if (firstClick.textContent === '') {
         firstClick.textContent = secondClickFirstLetter;
@@ -425,7 +425,7 @@ columns.forEach((column, index) => {
   });
 
   column.addEventListener('contextmenu', (event) => {
-    event.preventDefault(); // prevent the default context menu from showing up
+    if (event.cancelable) event.preventDefault(); // prevent the default context menu from showing up
     if (column.textContent.length > 0) {
       column.textContent = column.textContent.slice(0, -1); // remove the last character
       // Update local storage with the new table data
@@ -438,49 +438,89 @@ columns.forEach((column, index) => {
     }
   });
 
-  column.addEventListener('touchstart', (event) => {
+  document.addEventListener('touchstart', (event) => {
     if (event.touches.length === 1 && !isCooldown) {
-      // Single touch, add a letter
-      if (!firstClick) {
-        firstClick = column;
-        firstClick.style.backgroundColor = '#d1c02a';
-        clickTimeout = setTimeout(() => {
-          // Long tap, remove last letter
-          if (firstClick.textContent) {
-            firstClick.textContent = firstClick.textContent.slice(0, -1);
-          }
-          firstClick.style.backgroundColor = '';
-          firstClick = null;
-        }, 600);
-      } else {
-        const secondClick = column;
-        const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
-        const secondClickFirstLetter = secondClick.classList[0].charAt(0).toUpperCase();
-        if (firstClick.textContent === '') {
-          firstClick.textContent = secondClickFirstLetter;
-        } else {
-          firstClick.textContent += secondClickFirstLetter;
-        }
+      const clickedColumn = event.target.closest('#hits th');
+      if (!clickedColumn && firstClick) {
+        // Second click is outside the columns of the table, cancel the touch event
+        if (event.cancelable) event.preventDefault();
         firstClick.style.backgroundColor = '';
         firstClick = null;
-
-        // Update local storage with the new table data
-        const hitsData = [];
-        for (let i = 0; i < columns.length; i++) {
-          const column = columns[i];
-          hitsData.push(column.textContent);
-        }
-        sessionStorage.setItem('hits', JSON.stringify(hitsData));
-
-        // Set cooldown for the clicked column
-        isCooldown = true;
-        setTimeout(() => {
-          isCooldown = false;
-        }, 300);
       }
     }
-    event.preventDefault(); // prevent the default touch event
   });
+  
+  column.addEventListener('touchstart', (event) => {
+    if (event.touches.length === 1) {
+      const touchX = event.touches[0].clientX;
+      const touchY = event.touches[0].clientY;
+      const headerRowRect = document.getElementById('hits').querySelector('thead tr').getBoundingClientRect();
+  
+      if (
+        touchX >= headerRowRect.left && touchX <= headerRowRect.right &&
+        touchY >= headerRowRect.top && touchY <= headerRowRect.bottom
+      ) {
+        if (!isCooldown) {
+          const clickedColumn = event.target.closest('#hits th');
+          if (!clickedColumn) {
+            // Second click is outside the columns of the table "hits"
+            if (firstClick) {
+              firstClick.style.backgroundColor = '';
+              firstClick = null;
+            }
+          } else {
+            // Single touch, add a letter
+            if (!firstClick) {
+              firstClick = clickedColumn;
+              firstClick.style.backgroundColor = '#d1c02a';
+              clickTimeout = setTimeout(() => {
+                // Long tap, remove last letter
+                if (firstClick.textContent) {
+                  firstClick.textContent = firstClick.textContent.slice(0, -1);
+                }
+                firstClick.style.backgroundColor = '';
+                firstClick = null;
+              }, 600);
+            } else {
+              const secondClick = clickedColumn;
+              //const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
+              const secondClickFirstLetter = secondClick.classList[0].charAt(0).toUpperCase();
+              if (firstClick.textContent === '') {
+                firstClick.textContent = secondClickFirstLetter;
+              } else {
+                firstClick.textContent += secondClickFirstLetter;
+              }
+              firstClick.style.backgroundColor = '';
+              firstClick = null;
+  
+              // Update local storage with the new table data
+              const hitsData = [];
+              for (let i = 0; i < columns.length; i++) {
+                const column = columns[i];
+                hitsData.push(column.textContent);
+              }
+              sessionStorage.setItem('hits', JSON.stringify(hitsData));
+  
+              // Set cooldown for the clicked column
+              isCooldown = true;
+              setTimeout(() => {
+                isCooldown = false;
+              }, 300);
+            }
+          }
+        }
+      } else {
+        // Touch outside the header row, cancel the click action
+        if (firstClick) {
+          firstClick.style.backgroundColor = '';
+          firstClick = null;
+        }
+      }
+  
+      if (event.cancelable) event.preventDefault(); // prevent the default touch event
+    }
+  });
+  
 
   column.addEventListener('touchend', () => {
     clearTimeout(clickTimeout);
@@ -493,13 +533,13 @@ columns.forEach((column, index) => {
   });
 
   column.addEventListener('touchmove', (event) => {
-    event.preventDefault(); // prevent scrolling while dragging
+    if (event.cancelable) event.preventDefault(); // prevent scrolling while dragging
   });
 
   column.addEventListener('touchcancel', (event) => {
     firstClick.style.backgroundColor = '';
     firstClick = null;
-    event.preventDefault(); // prevent the default touch event
+    if (event.cancelable) event.preventDefault(); // prevent the default touch event
   });
 });
 
