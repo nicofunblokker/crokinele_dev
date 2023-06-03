@@ -8,8 +8,8 @@ var players = [];
 var round = 0;
 
 // Get the table element and its header row
-const table = document.getElementById("hits");
-const headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
+const tablehits = document.getElementById("hits");
+const headerRow = tablehits.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
 
 
 
@@ -160,7 +160,7 @@ var cooldownDuration = 1000; // Cooldown duration in milliseconds
 playerInputsDiv.addEventListener("keydown", function(event) {
   var lastScoreInput = event.target;
   if (lastScoreInput.matches("input[type='number']") && event.key === "Enter") {
-    event.preventDefault(); // Prevent the default form submission behavior
+    if (event.cancelable) event.preventDefault(); // Prevent the default form submission behavior
 
     if (cooldownActive) {
       // If cooldown is active, do nothing
@@ -404,7 +404,7 @@ columns.forEach((column, index) => {
       firstClick.style.backgroundColor = '#d1c02a';
     } else {
       const secondClick = column;
-      const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
+      //const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
       const secondClickFirstLetter = secondClick.classList[0].charAt(0).toUpperCase();
       if (firstClick.textContent === '') {
         firstClick.textContent = secondClickFirstLetter;
@@ -425,7 +425,7 @@ columns.forEach((column, index) => {
   });
 
   column.addEventListener('contextmenu', (event) => {
-    event.preventDefault(); // prevent the default context menu from showing up
+    if (event.cancelable) event.preventDefault(); // prevent the default context menu from showing up
     if (column.textContent.length > 0) {
       column.textContent = column.textContent.slice(0, -1); // remove the last character
       // Update local storage with the new table data
@@ -443,7 +443,7 @@ columns.forEach((column, index) => {
       const clickedColumn = event.target.closest('#hits th');
       if (!clickedColumn && firstClick) {
         // Second click is outside the columns of the table, cancel the touch event
-        event.preventDefault();
+        if (event.cancelable) event.preventDefault();
         firstClick.style.backgroundColor = '';
         firstClick = null;
       }
@@ -474,7 +474,7 @@ columns.forEach((column, index) => {
           }, 600);
         } else {
           const secondClick = clickedColumn;
-          const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
+          //const secondClickBgColor = window.getComputedStyle(secondClick).getPropertyValue('background-color');
           const secondClickFirstLetter = secondClick.classList[0].charAt(0).toUpperCase();
           if (firstClick.textContent === '') {
             firstClick.textContent = secondClickFirstLetter;
@@ -500,7 +500,7 @@ columns.forEach((column, index) => {
         }
       }
     }
-    event.preventDefault(); // prevent the default touch event
+    if (event.cancelable) event.preventDefault(); // prevent the default touch event
   });
   
   
@@ -516,13 +516,13 @@ columns.forEach((column, index) => {
   });
 
   column.addEventListener('touchmove', (event) => {
-    event.preventDefault(); // prevent scrolling while dragging
+    if (event.cancelable) event.preventDefault(); // prevent scrolling while dragging
   });
 
   column.addEventListener('touchcancel', (event) => {
     firstClick.style.backgroundColor = '';
     firstClick = null;
-    event.preventDefault(); // prevent the default touch event
+    if (event.cancelable) event.preventDefault(); // prevent the default touch event
   });
 });
 
