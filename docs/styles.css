@@ -265,3 +265,19 @@ dialog button {
   margin-right: 10px;
   flex-shrink: 0;
 }
+
+@media only screen and (max-width: 767px) {
+  .player-disk {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .player-label {
+    margin-right: 0;
+  }
+  
+  input[type="number"] {
+    margin-left: 0;
+    margin-right: auto;
+  }
+}

@@ -128,6 +128,7 @@ function addPlayer(playerCount) {
     playerRow.appendChild(playerLabel);
   
     var scoreLabel = document.createElement("label");
+    scoreLabel.className = "player-label";
     scoreLabel.innerHTML = "#";
     scoreLabel.style.marginRight = "10px";
     playerRow.appendChild(scoreLabel);
@@ -562,7 +563,10 @@ option1Button.onclick = () => {
 };  
 
 option2Button.onclick = () => {
-  reset();
+  const confirmReset = confirm("Are you sure you want to reset?");
+  if (confirmReset) {
+    reset();
+  }
   myDialog.style.display = "none";
 };
 
