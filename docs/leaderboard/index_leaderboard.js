@@ -5,48 +5,77 @@ const csvData = localStorage.getItem("csvData");
 const summaryTable = [];
 
 // Create table headers
-const headers = ["Player", "Total", "Mean"];
+const headers = ["Player", "Total", "Mean (per round)", "Games Won"];
 
-// Check if csvData exists in localStorage
 if (csvData) {
-  const parsedData = JSON.parse(csvData);
+    const parsedData = JSON.parse(csvData);
+    const games = {};
 
-  // Create an object to store the totals and counts for each player
-  const summary = {};
+    // Create an object to store the totals, counts, and games won for each player
+    const summary = {};
 
-  // Iterate over each row in the parsed data
-  for (const row of parsedData) {
-    const player = row[3];
-    const score = parseFloat(row[4]); // Corrected index to 5
+    // Sum scores for each game ID for each player
+    for (const row of parsedData) {
+        const gameId = row[0];
+        const player = row[3];
+        const score = parseFloat(row[4]);
 
-    // Check if the player already exists in the summary object
-    if (summary.hasOwnProperty(player)) {
-      // If the player exists, update the total and count
-      summary[player].total += score;
-      summary[player].count += 1;
-    } else {
-      // If the player doesn't exist, initialize the total and count
-      summary[player] = { total: score, count: 1 };
+        if (!games[gameId]) {
+            games[gameId] = {};
+        }
+
+        if (!games[gameId][player]) {
+            games[gameId][player] = 0;
+        }
+
+        games[gameId][player] += score;
     }
-  }
 
-  // Iterate over the players in the summary object
-  for (const player in summary) {
-    if (summary.hasOwnProperty(player)) {
-      const total = summary[player].total;
-      const count = summary[player].count;
-      const mean = total / count;
-
-      // Create a row array with player, total, and mean values
-      const row = [player, total, mean];
-
-      // Add the row to the summary table array
-      summaryTable.push(row);
+    // Initialize totals, counts, and games won for all players
+    for (const row of parsedData) {
+        const player = row[3];
+        if (!summary[player]) {
+            summary[player] = { total: 0, count: 0, gamesWon: 0 };
+        }
     }
-  }
 
-  // Sort the summary table by mean (descending order)
-  summaryTable.sort((a, b) => b[2] - a[2]);
+    // Determine which player has won each game and count the number of games won
+    for (const gameId in games) {
+        let maxScore = -Infinity;
+        let winner = null;
+
+        for (const player in games[gameId]) {
+            if (games[gameId][player] > maxScore) {
+                maxScore = games[gameId][player];
+                winner = player;
+            }
+        }
+
+        if (winner) {
+            summary[winner].gamesWon += 1;
+        }
+    }
+
+    // Calculate totals and counts for all players
+    for (const row of parsedData) {
+        const player = row[3];
+        const score = parseFloat(row[4]);
+        summary[player].total += score;
+        summary[player].count += 1;
+    }
+
+    // Calculate mean for all players
+    for (const player in summary) {
+        const total = summary[player].total;
+        const count = summary[player].count;
+        const mean = count === 0 ? 0 : total / count; // Calculate the mean
+        const gamesWon = summary[player].gamesWon;
+        const row = [player, total, mean, gamesWon];
+        summaryTable.push(row);
+    }
+
+    // Sort the summary table by mean (descending order)
+    summaryTable.sort((a, b) => b[2] - a[2]);
 }
 
 // Generate HTML table
