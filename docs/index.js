@@ -88,7 +88,7 @@ function addPlayer(playerCount) {
   var defaultNames = ["blue", "red", "white", "black"];
   
   for (var i = 0; i < playerCount; i++) {
-    var playerName = prompt("Enter the name for Player " + (i + 1));
+    var playerName = prompt("Enter the name for Player " + (i + 1)).trim();
   
     // Check if the user did not provide a name
     if (playerName === null || playerName.trim() === "") {
@@ -98,7 +98,12 @@ function addPlayer(playerCount) {
   
     // Check for duplicate names
     while (playerNames.includes(playerName)) {
-      playerName = prompt("Please enter a unique name for Player " + (i + 1));
+      playerName = prompt("Please enter a unique name for Player " + (i + 1)).trim();
+        // Check if the user did not provide a name
+      if (playerName === null || playerName.trim() === "") {
+      // Use default name
+      playerName = defaultNames[i];
+    }
     }
   
     playerNames.push(playerName);
