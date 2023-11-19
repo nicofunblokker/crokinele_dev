@@ -88,9 +88,16 @@ function addPlayer(playerCount) {
 
   for (var i = 0; i < playerCount; i++) {
     var playerName = prompt("Enter the name for Player " + (i + 1));
-    if (playerName !== null && playerName.trim() !== "") {
-      playerNames.push(playerName);
+    while (
+      playerName === null ||
+      playerName.trim() === "" ||
+      playerNames.includes(playerName)
+    ) {
+      // Prompt again if the name is empty or already exists
+      playerName = prompt("Please enter a valid and unique name for Player " + (i + 1));
     }
+
+    playerNames.push(playerName);
   }
 
   // Assign default names only to empty names
@@ -108,7 +115,6 @@ function addPlayer(playerCount) {
 
   for (var i = 0; i < playerCount; i++) {
     var playerRow = document.createElement("div");
-    //playerRow.className = "player-row";
     playerRow.style.display = "flex";
     playerRow.style.alignItems = "center";
     playerRow.style.marginBottom = "10px";
@@ -147,6 +153,7 @@ function addPlayer(playerCount) {
   }
   sessionStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
 }
+
 
 
 
