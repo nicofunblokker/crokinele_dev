@@ -85,24 +85,27 @@ for (var i = 0; i < playerButtons.length; i++) {
 
 function addPlayer(playerCount) {
   var playerNames = [];
-
+  var defaultNames = ["blue", "red", "white", "black"];
+  
   for (var i = 0; i < playerCount; i++) {
     var playerName = prompt("Enter the name for Player " + (i + 1));
-    while (
-      playerName === null ||
-      playerName.trim() === "" ||
-      playerNames.includes(playerName)
-    ) {
-      // Prompt again if the name is empty or already exists
-      playerName = prompt("Please enter a valid and unique name for Player " + (i + 1));
+  
+    // Check if the user did not provide a name
+    if (playerName === null || playerName.trim() === "") {
+      // Use default name
+      playerName = defaultNames[i];
     }
-
+  
+    // Check for duplicate names
+    while (playerNames.includes(playerName)) {
+      playerName = prompt("Please enter a unique name for Player " + (i + 1));
+    }
+  
     playerNames.push(playerName);
   }
-
+  
   // Assign default names only to empty names
   if (playerNames.length < playerCount) {
-    var defaultNames = ["blue", "red", "white", "black"];
     for (var i = playerNames.length; i < playerCount; i++) {
       playerNames.push(defaultNames[i]);
     }
