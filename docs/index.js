@@ -85,17 +85,32 @@ for (var i = 0; i < playerButtons.length; i++) {
 
 function addPlayer(playerCount) {
   var playerNames = [];
-
+  var defaultNames = ["blue", "red", "white", "black"];
+  
   for (var i = 0; i < playerCount; i++) {
-    var playerName = prompt("Enter the name for Player " + (i + 1));
-    if (playerName !== null && playerName.trim() !== "") {
-      playerNames.push(playerName);
+    var playerName = prompt("Enter the name for Player " + (i + 1)).trim();
+  
+    // Check if the user did not provide a name
+    if (playerName === null || playerName.trim() === "") {
+      // Use default name
+      playerName = defaultNames[i];
     }
+  
+    // Check for duplicate names
+    while (playerNames.includes(playerName)) {
+      playerName = prompt("Please enter a unique name for Player " + (i + 1)).trim();
+        // Check if the user did not provide a name
+      if (playerName === null || playerName.trim() === "") {
+      // Use default name
+      playerName = defaultNames[i];
+    }
+    }
+  
+    playerNames.push(playerName);
   }
-
+  
   // Assign default names only to empty names
   if (playerNames.length < playerCount) {
-    var defaultNames = ["blue", "red", "white", "black"];
     for (var i = playerNames.length; i < playerCount; i++) {
       playerNames.push(defaultNames[i]);
     }
@@ -108,7 +123,6 @@ function addPlayer(playerCount) {
 
   for (var i = 0; i < playerCount; i++) {
     var playerRow = document.createElement("div");
-    //playerRow.className = "player-row";
     playerRow.style.display = "flex";
     playerRow.style.alignItems = "center";
     playerRow.style.marginBottom = "10px";
@@ -147,6 +161,7 @@ function addPlayer(playerCount) {
   }
   sessionStorage.setItem("playerInputsDiv", playerInputsDiv.innerHTML);
 }
+
 
 
 
