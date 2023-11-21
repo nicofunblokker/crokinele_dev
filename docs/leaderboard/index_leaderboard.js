@@ -41,20 +41,26 @@ if (csvData) {
 
     // Determine which player has won each game and count the number of games won
     for (const gameId in games) {
-        let maxScore = -Infinity;
-        let winner = null;
-
-        for (const player in games[gameId]) {
-            if (games[gameId][player] > maxScore) {
-                maxScore = games[gameId][player];
-                winner = player;
-            }
-        }
-
-        if (winner) {
-            summary[winner].gamesWon += 1;
-        }
-    }
+      let maxScore = -Infinity;
+      let winners = [];
+  
+      for (const player in games[gameId]) {
+          const playerScore = games[gameId][player];
+  
+          if (playerScore > maxScore) {
+              maxScore = playerScore;
+              winners = [player];
+          } else if (playerScore === maxScore) {
+              winners.push(player);
+          }
+      }
+  
+      if (winners.length > 0) {
+          winners.forEach((winner) => {
+              summary[winner].gamesWon += 1;
+          });
+      }
+  }
 
     // Calculate totals and counts for all players
     for (const row of parsedData) {
