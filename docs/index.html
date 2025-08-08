@@ -3,7 +3,8 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <link rel="shortcut icon" type="image/x-icon" href="crokinole2.png">    
+    <link rel="shortcut icon" type="image/x-icon" href="crokinole2.png">  
+    <link rel="manifest" href="/manifest.json">  
   </head>
   <body>
     <dialog id="myDialog">
@@ -92,6 +93,20 @@
       });
 
     </script>
+      <!-- Register the service worker after page load -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then((registration) => {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script> -->
   </body>
 </html>
