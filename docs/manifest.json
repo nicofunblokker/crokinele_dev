@@ -1,0 +1,41 @@
+{
+  "name": "Crokinele",
+  "short_name": "Crokinele",
+  "description": "Score tracker for the game Crokinele.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-500.png",
+      "sizes": "500x500",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "./screenshots/desktop.png",
+      "sizes": "1920x688",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "./screenshots/mobile.png",
+      "sizes": "952x669",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}

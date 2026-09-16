@@ -765,3 +765,23 @@ storeButton.addEventListener('click', function() {
   // Optional: Update any UI elements or perform additional actions
 
 });
+
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./sw.js")
+      .then(registration => {
+        console.log(
+          "Crokinele service worker registered:",
+          registration.scope
+        );
+      })
+      .catch(error => {
+        console.error(
+          "Crokinele service worker registration failed:",
+          error
+        );
+      });
+  });
+}
